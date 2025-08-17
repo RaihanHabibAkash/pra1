@@ -9,6 +9,8 @@ import authRoute from "./routes/auth.route.js";
 import songsRoute from "./routes/songs.route.js";
 import statsRoute from "./routes/stats.route.js";
 
+import { connectionDB } from "./routes/lib/db.js";
+
 
 dotenv.config();
 const PORT = process.env.PORT || 7000;
@@ -24,4 +26,5 @@ app.use("/api/stats", statsRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+    connectionDB();
 });
