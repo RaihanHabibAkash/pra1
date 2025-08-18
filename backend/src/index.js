@@ -12,10 +12,12 @@ import statsRoute from "./routes/stats.route.js";
 // Connection to MongoDB
 import { connectionDB } from "./lib/db.js";
 
-
 dotenv.config();
 const PORT = process.env.PORT || 7000;
 const app = express();
+
+// For req.body to parse JSON comming from frontend
+app.use(express.json());
 
 // Routes
 app.use("/api/user", userRoute);
