@@ -9,7 +9,8 @@ import authRoute from "./routes/auth.route.js";
 import songsRoute from "./routes/songs.route.js";
 import statsRoute from "./routes/stats.route.js";
 
-import { connectionDB } from "./routes/lib/db.js";
+// Connection to MongoDB
+import { connectionDB } from "./lib/db.js";
 
 
 dotenv.config();
