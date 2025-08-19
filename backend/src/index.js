@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import { clerkMiddleware } from '@clerk/express'
 
 // Routes import
 import userRoute from "./routes/user.route.js";
@@ -18,6 +19,8 @@ const app = express();
 
 // For req.body to parse JSON comming from frontend
 app.use(express.json());
+
+app.use(clerkMiddleware());
 
 // Routes
 app.use("/api/user", userRoute);
