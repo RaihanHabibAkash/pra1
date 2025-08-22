@@ -20,6 +20,7 @@ const app = express();
 // For req.body to parse JSON comming from frontend
 app.use(express.json());
 
+// For add auth in req => req.auth
 app.use(clerkMiddleware());
 
 // Routes
