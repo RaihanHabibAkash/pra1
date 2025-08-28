@@ -1,6 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
-import { clerkMiddleware } from '@clerk/express'
+import { clerkMiddleware } from "@clerk/express";
+import fileUpload from "express-fileupload";
+
+//build in node module
+import path from "path";
 
 // Routes import
 import userRoute from "./routes/user.route.js";
@@ -17,11 +21,27 @@ dotenv.config();
 const PORT = process.env.PORT || 7000;
 const app = express();
 
+// Current file directory
+const __dirname = path.resolve();
+
 // For req.body to parse JSON comming from frontend
 app.use(express.json());
 
 // For add auth in req => req.auth
 app.use(clerkMiddleware());
+
+app.use(fileUpload({
+    // file will temp file on disk of PC 
+    useTempFiles: true, 
+    // new folder "temp_file" will be created inside __dirname 
+    tempFileDir: path.join(__dirname, "temp_file"), 
+    // if there is no folder for temp filse one new will be created
+    createParentPath: true,
+    limits: {
+        //8 mb max
+        fileSize: 8 * 1024 * 1024 
+    }
+}));
 
 // Routes
 app.use("/api/user", userRoute);
