@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { getAdmin } from "../controllers/admin.controller.js";
-import { requireAdmin } from "../middlewere/auth.middlewere.js";
+import { createSong } from "../controllers/admin.controller.js";
+import { protectRoute, requireAdmin } from "../middlewere/auth.middlewere.js";
 
 const router = Router();
 
-router.get("/" , requireAdmin, getAdmin);
+router.post("/songs", protectRoute, requireAdmin, createSong);
 
 export default router;

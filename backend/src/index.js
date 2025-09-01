@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { clerkMiddleware } from "@clerk/express";
 import fileUpload from "express-fileupload";
 
-//build in node module
+// build in node module
 import path from "path";
 
 // Routes import
@@ -31,14 +31,14 @@ app.use(express.json());
 app.use(clerkMiddleware());
 
 app.use(fileUpload({
-    // file will temp file on disk of PC 
+    // file will be temp file on disk of PC 
     useTempFiles: true, 
     // new folder "temp_file" will be created inside __dirname 
     tempFileDir: path.join(__dirname, "temp_file"), 
     // if there is no folder for temp filse one new will be created
     createParentPath: true,
     limits: {
-        //8 mb max
+        // 8 mb max
         fileSize: 8 * 1024 * 1024 
     }
 }));
