@@ -8,12 +8,15 @@ const uploadToCloudinary = async (file) => {
             resource_type: "auto"
         }); 
 
-        return result.secure_url;
+        return { url: result.secure_url,
+                 publicId: result.public_id,
+               }
     } catch (error) {
         console.log("Error while uploading in Cloudinary", error);
         throw new Error(`Error while uploading in Cloudinary: ${error.message}`);
     }
 }
+
 export const createSong = async (req, res) => {
     try {
         const { title, artist, duration, albumId } = req.body;
@@ -26,7 +29,7 @@ export const createSong = async (req, res) => {
         }
         const audioFile = req.files.audiofile;
         const imageFile = req.files.imagefile;
-        const [ audioUrl, imageUrl ] = await Promise.all([
+        const [ audioRef, imageRef ] = await Promise.all([
             uploadToCloudinary(audioFile),
             uploadToCloudinary(imageFile),
         ]);
@@ -34,11 +37,11 @@ export const createSong = async (req, res) => {
         const song = new Song({
             title,
             artist,
-            imageUrl,
-            audioUrl,
+            imageUrl: imageRef.url,
+            audioUrl: audioRef.url,
             duration,
             albumId: albumId || null    
-        })
+        });
         await song.save();
 
         if(albumId){
