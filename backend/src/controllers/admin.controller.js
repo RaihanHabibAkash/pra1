@@ -16,7 +16,7 @@ const uploadToCloudinary = async (file) => {
         throw new Error(`Error while uploading in Cloudinary: ${error.message}`);
     }
 }
-// resource_type = "video"; can be use in both "audio" and "video" 
+// resource_type = "video" => for default; can be use in both "audio" and "video" 
 const deleteInCloudinary = async (public_id, resource_type = "video") => {
     try {
         await cloudinary.uploader.destroy(public_id, { resource_type });
@@ -30,14 +30,17 @@ export const createSong = async (req, res) => {
     try {
         const { title, artist, duration, albumId } = req.body;
         if(!title || !artist || !duration){
-            return res.status(400).json({ message: "title, artist and duration are required" });
+            return res.status(400).json({ message: "Title, Artist and Duration are required" });
+        }
+        if(isNaN(duration)){
+            return res.status(400).json({ message: "Duration must be a Number" }); 
         }
 
-        if(!req.files || !req.files.audiofile || !req.files.imagefile){
+        if(!req.files || !req.files.audioFile || !req.files.imageFile){
             return res.status(400).json({ message: "Submit all files" });
         }
-        const audioFile = req.files.audiofile;
-        const imageFile = req.files.imagefile;
+        const audioFile = req.files.audioFile;
+        const imageFile = req.files.imageFile;
         const [ audioRef, imageRef ] = await Promise.all([
             uploadToCloudinary(audioFile),
             uploadToCloudinary(imageFile),
@@ -81,17 +84,46 @@ export const deleteSong = async (req, res) => {
                 $pull: { songs: song._id } 
             });
         }
-        if(song.audioPublicId || song.imagePublicId){
+        if(song.audioPublicId && song.imagePublicId){
             await Promise.all([
                 deleteInCloudinary(song.audioPublicId, "video"),
                 deleteInCloudinary(song.imagePublicId, "image"),
             ]);
-        }
-        await Song.findByIdAndDelete(id);
 
-        return res.status(200).json({ message: "Song deleted successfully", deletedSong: song });
+            await Song.findByIdAndDelete(id);
+            return res.status(200).json({ message: "Song deleted successfully", deletedSong: song });
+        }     
     } catch (error) {
         console.log("Error while deleteing a Song", error);
+        res.status(500).json({ message: "Internal Server Error", error });
+    }
+}
+
+export const createAlbum = async (req, res) => {
+    try {
+        const { title, artist, releaseYear } = req.body;
+        if(!title || !artist || !releaseYear){
+            return res.status(400).json({ message: "Title, Artist, Release-year are required" });
+        }
+
+        if(!req.files || !req.files.imageFile){
+            return res.status(400).json({ message: "Submit Image file"})
+        }
+        const imageFile = req.files.imageFile;
+        const imageRef = await uploadToCloudinary(imageFile);
+
+        const album = new Album({
+            title,
+            artist,
+            imageUrl: imageRef.url,
+            imagePublicId: imageRef.publicId,
+            releaseYear
+        });
+
+        await album.save();
+        res.status(201).json({ message: "Album Created sucessfully", createdAlbum: album });
+    } catch (error) {
+        console.log("Error while Creating Album", error);
         res.status(500).json({ message: "Internal Server Error", error });
     }
 }
