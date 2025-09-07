@@ -132,8 +132,32 @@ export const deleteAlbum = async (req, res) => {
     try {
         const { id } = req.params;
 
+        // Finding Album in MongoDB
+        const album = await Album.findById(id);
+        if(!album){
+            return res.status(404).json({ message: "Album not found" });
+        }
+
+        // Finding Songs of the Album
+        const songs = await Song.find({ albumId: id });
+        // Delete Song of Album in Cloudinary
+        if(songs.length > 0){
+            await Promise.all(
+                songs.flatMap(
+                    song => [
+                        song.imagePublicId && deleteInCloudinary(song.imagePublicId, "image"),
+                        song.audioPublicId && deleteInCloudinary(song.audioPublicId, "video"),])
+            )
+        }
+        // MongoDB deletation for Songs in Album
         await Song.deleteMany({ albumId: id });
-        const album = await Album.findByIdAndDelete(id);
+
+        // Delete Album Image in Cloudinary
+        if(album.imagePublicId){
+            await deleteInCloudinary(album.imagePublicId, "image");
+        }
+        // Delte Album in MongoDB
+        await Album.findByIdAndDelete(id);
         res.status(200).json({ message: "Album Delted sucessfully", deletedAlbum: album });
     } catch (error) {
         console.log("Error while Deleting Album", error);
