@@ -64,7 +64,7 @@ export const createSong = async (req, res) => {
             }) 
         }
 
-        return res.status(201).json({ message: "Song Created Sucessfully", createdSong: song });
+        res.status(201).json({ message: "Song Created Sucessfully", createdSong: song });
     } catch (error) {
         console.log("Error while creating song", error);
         res.status(500).json({ message: "Internal server error", error });
@@ -91,7 +91,7 @@ export const deleteSong = async (req, res) => {
             ]);
 
             await Song.findByIdAndDelete(id);
-            return res.status(200).json({ message: "Song deleted successfully", deletedSong: song });
+            res.status(200).json({ message: "Song deleted successfully", deletedSong: song });
         }     
     } catch (error) {
         console.log("Error while deleteing a Song", error);

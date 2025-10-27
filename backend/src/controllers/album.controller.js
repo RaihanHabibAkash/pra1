@@ -9,7 +9,7 @@ export const getAlbums = async (req, res) => {
         res.status(200).json({ albums });
     } catch (error) {
         console.log("Error in getAlbums", error);
-        res.status(400).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error" });
     }
 }
 
