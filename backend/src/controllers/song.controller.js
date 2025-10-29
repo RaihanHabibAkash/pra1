@@ -28,6 +28,7 @@ export const getFeaturedSongs = async (req, res) => {
                     _id: 1,
                     title: 1,
                     artist: 1,
+                    genre: 1,
                     imageUrl: 1,
                     audioUrl: 1
                 }
