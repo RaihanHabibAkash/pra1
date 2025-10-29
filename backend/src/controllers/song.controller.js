@@ -1,4 +1,6 @@
 import { Song } from "../models/song.model.js";
+import { User } from "../models/user.model.js";
+
 export const getAllSongs = async (req, res) => {
     try {
         // Newest to Oldest
@@ -43,7 +45,8 @@ export const getFeaturedSongs = async (req, res) => {
 
 export const getMadeForYouSongs = async (req, res) => {
     try {
-    const userId = req.user?._id; // assuming user is authenticated (like via JWT)
+    const { id } = req.params;
+    const userId = Song.findById(id); 
 
     let songs;
 
@@ -81,7 +84,7 @@ export const getMadeForYouSongs = async (req, res) => {
       ]);
     }
 
-    if (songs.length === 0) {
+    if (songs.length == 0) {
       return res.status(404).json({ message: "Songs Not Found" });
     }
 
