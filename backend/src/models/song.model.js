@@ -33,6 +33,18 @@ const songSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Album",
         required: false
+    },
+    likes: {
+        type: Number,
+        required: false
+    },
+    playCount: {
+        type: Number,
+        required: false
+    },
+    genre: {
+        type: String,
+        required: true
     }
 }, {timestamps: true});
 
