@@ -54,7 +54,8 @@ export const createSong = async (req, res) => {
             audioUrl: audioRef.url,
             audioPublicId: audioRef.publicId,
             duration,
-            albumId: albumId || null    
+            genre,
+            albumId: albumId || null
         });
         await song.save();
 

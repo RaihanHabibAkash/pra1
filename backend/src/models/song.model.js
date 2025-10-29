@@ -29,6 +29,10 @@ const songSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    genre: {
+        type: String,
+        required: true
+    },
     albumId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Album",
@@ -41,10 +45,6 @@ const songSchema = new mongoose.Schema({
     playCount: {
         type: Number,
         required: false
-    },
-    genre: {
-        type: String,
-        required: true
     }
 }, {timestamps: true});
 
