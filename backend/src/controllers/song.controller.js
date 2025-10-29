@@ -46,7 +46,8 @@ export const getFeaturedSongs = async (req, res) => {
 export const getMadeForYouSongs = async (req, res) => {
     try {
     const { id } = req.params;
-    const userId = Song.findById(id); 
+    const userId = Song.findById(id);
+    let song; 
 
     if (userId) {
       const user = await User.findById(userId).populate("likedSongs");
@@ -56,7 +57,7 @@ export const getMadeForYouSongs = async (req, res) => {
         const likedGenres = [...new Set(user.likedSongs.map(song => song.genre))];
 
         // find other songs with same genres (but not already liked)
-        const songs = await Song.find([
+        songs = await Song.find([
             {
                 genre: { $in: likedGenres }
             },  
