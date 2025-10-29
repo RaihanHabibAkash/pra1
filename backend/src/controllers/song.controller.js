@@ -28,7 +28,6 @@ export const getFeaturedSongs = async (req, res) => {
                     _id: 1,
                     title: 1,
                     artist: 1,
-                    genre: 1,
                     imageUrl: 1,
                     audioUrl: 1
                 }
@@ -49,8 +48,6 @@ export const getMadeForYouSongs = async (req, res) => {
     const { id } = req.params;
     const userId = Song.findById(id); 
 
-    let songs;
-
     if (userId) {
       const user = await User.findById(userId).populate("likedSongs");
 
@@ -59,10 +56,14 @@ export const getMadeForYouSongs = async (req, res) => {
         const likedGenres = [...new Set(user.likedSongs.map(song => song.genre))];
 
         // find other songs with same genres (but not already liked)
-        songs = await Song.find({
-          genre: { $in: likedGenres },
-          _id: { $nin: user.likedSongs.map(song => song._id) }
-        })
+        const songs = await Song.find([
+            {
+                genre: { $in: likedGenres }
+            },  
+            {
+                id: { $nin: user.likedSongs.map(song => song._id) }
+            }
+        ])
           .sort({ createdAt: -1 })
           .limit(4)
           .select("_id title artist imageUrl audioUrl");
@@ -78,7 +79,6 @@ export const getMadeForYouSongs = async (req, res) => {
             _id: 1,
             title: 1,
             artist: 1,
-            genre: 1,
             imageUrl: 1,
             audioUrl: 1
           }
@@ -114,7 +114,6 @@ export const getTrendingSongs = async (req, res) => {
                     _id: 1,
                     title: 1,
                     artist: 1,
-                    genre: 1,
                     imageUrl: 1,
                     audioUrl: 1
                 }
