@@ -70,7 +70,7 @@ export const getMadeForYouSongs = async (req, res) => {
     }
 
     // if user not logged in or no liked songs → fallback to random
-    if (!songs || songs.length === 0) {
+    if (!songs || songs.length == 0) {
       songs = await Song.aggregate([
         { $sample: { size: 4 } },
         {
@@ -78,6 +78,7 @@ export const getMadeForYouSongs = async (req, res) => {
             _id: 1,
             title: 1,
             artist: 1,
+            genre: 1,
             imageUrl: 1,
             audioUrl: 1
           }
@@ -113,6 +114,7 @@ export const getTrendingSongs = async (req, res) => {
                     _id: 1,
                     title: 1,
                     artist: 1,
+                    genre: 1,
                     imageUrl: 1,
                     audioUrl: 1
                 }
