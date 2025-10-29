@@ -47,7 +47,7 @@ export const getMadeForYouSongs = async (req, res) => {
     try {
     const { id } = req.params;
     const userId = Song.findById(id);
-    let song; 
+    let songs; 
 
     if (userId) {
       const user = await User.findById(userId).populate("likedSongs");
