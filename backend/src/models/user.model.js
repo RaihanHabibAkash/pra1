@@ -17,11 +17,13 @@ const userSchema = new mongoose.Schema({
     likedSongs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Song",
+        default: [],
         required: false
     }],
     recentlyPlayed: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Song",
+        default: [],
         required: false
     }]
 }, {timestamps: true});

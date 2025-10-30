@@ -31,6 +31,10 @@ const songSchema = new mongoose.Schema({
     },
     genre: {
         type: String,
+        enum: [
+            "English", "Bangla", "Urdu", "Music",
+            "Arbi", "Hindi", "Spenish", "French", "Others"
+            ],
         required: true
     },
     albumId: {
@@ -40,12 +44,14 @@ const songSchema = new mongoose.Schema({
     },
     likes: {
         type: Number,
+        default: 0,
         required: false
     },
     playCount: {
         type: Number,
-        required: false
-    }
+        default: 0,
+        required: true
+    },
 }, {timestamps: true});
 
 export const Song = mongoose.model("Song", songSchema);
