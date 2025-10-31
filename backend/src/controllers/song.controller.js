@@ -46,33 +46,35 @@ export const getFeaturedSongs = async (req, res) => {
 export const getMadeForYouSongs = async (req, res) => {
     try {
         const userId = req.auth?.userId;
-        const currentUser = User.findById(userId).populate("likedSongs");
-        if(!currentUser){
-            console.log("You are not LogedIn", error)
+        // Gives the all fields of the liked song
+        const currentUserLikes = await User.findById(userId).populate("likedSongs");
+        if(!currentUserLikes){
+            console.log("You are not LogedIn", error);
             return res.status(400).json({ message: "Unauthorized" });
         }
         let songs;
 
-        if(currentUser.likedSongs.length > 0){
+        if(currentUserLikes.likedSongs.length > 0){
+            const likedSongIds = currentUserLikes.likedSongs.map(song => song._id);
             // User liked songs genre playlist
-            const likedGenres = [...new Set(currentUser.likedSongs.map(song => song.genre))];
+            const likedGenres = [...new Set(currentUserLikes.likedSongs.map(song => song.genre))];
             // User liked songs artist playlist
-            const likedArtist = [...new Set(currentUser.likedSongs.map(song => song.artist))];
-            const likedSongIds = currentUser.likedSongs.map(song => song._id);
+            const likedArtist = [...new Set(currentUserLikes.likedSongs.map(song => song.artist))];
 
             songs = await Song.aggregate([
                 {
                     $match: {
                         $or: [
+                            // For genre or artist of only liked genre or liked artist song
                             { genre: { $in: likedGenres } },
-                            { aritst: { $in: likedArtist } }
+                            { artist: { $in: likedArtist } }
                         ],
                         // Chose exept liked songs 
                         _id: { $nin: likedSongIds }
                     }
                 },
                 {
-                    $limit: 4
+                    $limit: 10
                 },
                 {
                     $project: {
@@ -107,7 +109,7 @@ export const getMadeForYouSongs = async (req, res) => {
 
         }
         if(songs.length == 0){
-            return res.status(404).json({ message: "Songs Not Found" });
+            return res.status(404).json({ message: "Songs not found" });
         }
         res.status(200).json({ songs });
     } catch (error) {
@@ -126,7 +128,7 @@ export const getTrendingSongs = async (req, res) => {
                 }
             },
             {
-                $limit: 4
+                $limit: 10
             },
             {
                 $project: {
@@ -148,3 +150,66 @@ export const getTrendingSongs = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export const getRecentlyPlayedSongs = async (req, res) => {
+  try {
+    const currentUserId = req.auth?.userId;
+    if (!currentUserId) {
+      return res.status(400).json({ message: "User not authenticated" });
+    }
+
+    const user = await User.findById(currentUserId).populate("recentlyPlayed");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ recentlyPlayed: user.recentlyPlayed });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+export const addToRecentlyPlayed = async (req, res) => {
+  try {
+    const currentUserId = req.auth?.userId;
+    const { songId } = req.params;
+
+    if (!currentUserId || !songId) {
+      return res.status(400).json({ message: "Invalid request" });
+    }
+
+    const user = await User.findById(currentUserId);
+    const song = await Song.findById(songId);
+
+    if (!user || !song) {
+      return res.status(404).json({ message: "User or song not found" });
+    }
+
+    // Remove if already in list
+    user.recentlyPlayed = user.recentlyPlayed.filter(
+      (id) => id.toString() !== songId
+    );
+
+    // Add to top of the list
+    user.recentlyPlayed.unshift(songId);
+
+    // Optional: limit to last 20 songs
+    if (user.recentlyPlayed.length > 20) {
+      user.recentlyPlayed = user.recentlyPlayed.slice(0, 20);
+    }
+
+    await user.save();
+
+    const populatedUser = await user.populate("recentlyPlayed");
+    res.status(200).json({
+      message: "Song added to recently played",
+      recentlyPlayed: populatedUser.recentlyPlayed,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
