@@ -164,7 +164,9 @@ export const getRecentlyPlayedSongs = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ recentlyPlayed: user.recentlyPlayed });
+    const recentlyPlayedSongs = user.recentlyPlayed.slice(0, 20);
+    
+    res.status(200).json({ recentlyPlayedSongs });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -181,7 +183,7 @@ export const addToRecentlyPlayed = async (req, res) => {
       return res.status(400).json({ message: "Invalid request" });
     }
 
-    const user = await User.findById(currentUserId);
+    const user = await User.findById(currentUserId).populate("recentlyPlayed");
     const song = await Song.findById(songId);
 
     if (!user || !song) {
@@ -189,12 +191,9 @@ export const addToRecentlyPlayed = async (req, res) => {
     }
 
     // Remove if already in list
-    user.recentlyPlayed = user.recentlyPlayed.filter(
-      (id) => id.toString() !== songId
-    );
-
+    user.recentlyPlayed = user.recentlyPlayed.filter(id => !id.equals(song._id));
     // Add to top of the list
-    user.recentlyPlayed.unshift(songId);
+    user.recentlyPlayed.unshift(song._id);
 
     // Optional: limit to last 20 songs
     if (user.recentlyPlayed.length > 20) {
@@ -202,12 +201,7 @@ export const addToRecentlyPlayed = async (req, res) => {
     }
 
     await user.save();
-
-    const populatedUser = await user.populate("recentlyPlayed");
-    res.status(200).json({
-      message: "Song added to recently played",
-      recentlyPlayed: populatedUser.recentlyPlayed,
-    });
+    res.status(200).json({ recentlyPlayedSongs: user.recentlyPlayed });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
