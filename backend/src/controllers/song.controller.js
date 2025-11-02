@@ -158,7 +158,7 @@ export const getRecentlyPlayedSongs = async (req, res) => {
       return res.status(400).json({ message: "User not authenticated" });
     }
 
-    const user = await User.findById(currentUserId).populate("recentlyPlayed");
+    const user = await User.findOne({ clerkId: currentUserId });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -183,16 +183,16 @@ export const addToRecentlyPlayed = async (req, res) => {
       return res.status(400).json({ message: "Invalid request" });
     }
 
-    const user = await User.findById(currentUserId).populate("recentlyPlayed");
+    const user = await User.findOne({ clerkId: currentUserId });
     const song = await Song.findById(songId);
 
     if (!user || !song) {
       return res.status(404).json({ message: "User or song not found" });
     }
 
-    // Remove if already in list
+    // filter and give other songs exept the song is equls to song._id
     user.recentlyPlayed = user.recentlyPlayed.filter(id => !id.equals(song._id));
-    // Add to top of the list
+
     user.recentlyPlayed.unshift(song._id);
 
     // Optional: limit to last 20 songs

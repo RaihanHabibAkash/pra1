@@ -16,13 +16,15 @@ export const getStats = async (req, res) => {
                     $unionWith: {
                         // Connecting song with album
                         coll: "albums",
+                        // "pipeline": [] means don’t filter anything 
+                        // just take all album documents
                         pipeline: []
                     }
                 },
                 {
                     $group: {
                     // Group using artist
-                        _id: "artist"
+                        _id: "$artist"
                     }
                 },
                 {
