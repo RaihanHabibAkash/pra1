@@ -153,55 +153,22 @@ export const getTrendingSongs = async (req, res) => {
 
 export const getRecentlyPlayedSongs = async (req, res) => {
   try {
-    const currentUserId = req.auth?.userId;
-    if (!currentUserId) {
+    const userId = req.auth?.userId;
+    if (!userId) {
       return res.status(400).json({ message: "User not authenticated" });
     }
 
-    const user = await User.findOne({ clerkId: currentUserId });
+    const currentUser = await User.findOne({ userId }).populate("recentlyPlayed");
 
-    if (!user) {
+    if (!currentUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const recentlyPlayedSongs = user.recentlyPlayed.slice(0, 20);
-    
-    res.status(200).json({ recentlyPlayedSongs });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
-  }
-};
-
-
-export const addToRecentlyPlayed = async (req, res) => {
-  try {
-    const currentUserId = req.auth?.userId;
-    const { songId } = req.params;
-
-    if (!currentUserId || !songId) {
-      return res.status(400).json({ message: "Invalid request" });
+    if(currentUser.recentlyPlayed.length > 20){
+    currentUser.recentlyPlayed.slice(0, 20);
+    await currentUser.save();
     }
-
-    const user = await User.findOne({ clerkId: currentUserId });
-    const song = await Song.findById(songId);
-
-    if (!user || !song) {
-      return res.status(404).json({ message: "User or song not found" });
-    }
-
-    // filter and give other songs exept the song is equls to song._id
-    user.recentlyPlayed = user.recentlyPlayed.filter(id => !id.equals(song._id));
-
-    user.recentlyPlayed.unshift(song._id);
-
-    // Optional: limit to last 20 songs
-    if (user.recentlyPlayed.length > 20) {
-      user.recentlyPlayed = user.recentlyPlayed.slice(0, 20);
-    }
-
-    await user.save();
-    res.status(200).json({ recentlyPlayedSongs: user.recentlyPlayed });
+    res.status(200).json({ recentlyPlayedSongs: currentUser.recentlyPlayed });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

@@ -33,18 +33,18 @@ export const deleteUser = async (req, res) => {
 export const toggleLike = async (req, res) => {
     try {
         const userId = req.auth?.userId;
-        const { songId } = req.params;
-        if(!userId || !songId){
+        const { id } = req.params;
+        if(!userId || !id){
             return res.status(400).json({ message: "Did not found song or user"});
         }
 
         const currentUser = await User.findOne({ clerkId: userId });
-        const song = await Song.findById(songId);
+        const song = await Song.findById(id);
         if(!currentUser || !song){
             return res.status(404).json({ message: "Did not found song or user"});          
         }
 
-        const alreadyLiked = currentUser.likedSongs.includes(song._id);
+       const alreadyLiked = currentUser.likedSongs.some(id => id.equals(song._id));
         if(alreadyLiked){
             // Disliking
             currentUser.likedSongs.pull(song._id);
@@ -62,7 +62,8 @@ export const toggleLike = async (req, res) => {
 
         res.status(200).json({
             likes: song.likes,
-            liked: !alreadyLiked
+            liked: !alreadyLiked,
+            likedSongs: currentUser.likedSongs
         });
     } catch (error) {
         console.error("Error in toggleLike", error);
@@ -70,18 +71,36 @@ export const toggleLike = async (req, res) => {
     }
 }
 
-export const getRecentlyPlayedSongs = async (req, res) => {
-    try {
-        
-    } catch (error) {
-        
-    }
-}
-
 export const addToRecentlyPlayed = async (req, res) => {
-    try {
-        
-    } catch (error) {
-        
+  try {
+    const currentUserId = req.auth?.userId;
+    const { songId } = req.params;
+
+    if (!currentUserId || !songId) {
+      return res.status(400).json({ message: "Invalid request" });
     }
-}
+
+    const user = await User.findOne({ clerkId: currentUserId });
+    const song = await Song.findById(songId);
+
+    if (!user || !song) {
+      return res.status(404).json({ message: "User or song not found" });
+    }
+
+    // filter and give other songs exept the song is equls to song._id
+    user.recentlyPlayed = user.recentlyPlayed.filter(id => !id.equals(song._id));
+
+    user.recentlyPlayed.unshift(song._id);
+
+    if (user.recentlyPlayed.length > 20) {
+      user.recentlyPlayed = user.recentlyPlayed.slice(0, 20);
+    }
+
+    await user.save();
+    await user.populate("recentlyPlayed");
+    res.status(200).json({ recentlyPlayedSongs: user.recentlyPlayed });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
