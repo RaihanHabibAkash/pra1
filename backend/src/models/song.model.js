@@ -29,6 +29,12 @@ const songSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    likedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+        required: false
+    }],
     genre: {
         type: String,
         enum: [

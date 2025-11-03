@@ -150,6 +150,27 @@ export const getTrendingSongs = async (req, res) => {
     }
 }
 
+export const getLikedSongs = async (req, res) => {
+    try {
+        const userId = req.auth?.userId;
+        const currentUser = await User.findOne({ clerkId: userId });
+        if(!userId || !currentUser){
+            return res.status(400).json({ message: "Error in getLiked Somgs" });
+        }
+
+        const songs = await Song.find({ likedBy: userId }).populate("likedBy").sort({ createdAt: -1 });
+
+        if(songs.length === 0){
+            return res.status(404).json({ message: "No Songs found" });
+        }
+
+        res.status(200).json({ likedSong: songs });
+    } catch (error) {
+        console.error("Error in getMadeForYouSongs:", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
 export const getRecentlyPlayedSongs = async (req, res) => {
   try {
     const userId = req.auth?.userId;

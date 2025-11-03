@@ -25,8 +25,12 @@ export const deleteUser = async (req, res) => {
         if(!user){
             return res.status(400).json({ message: "Not found" });
         }
-        user.pull(user._id);
-        await user.save();
+                
+        await Promise.all([
+            Song.updateMany({}, {$pull: {likedBy: user._id}}),
+            User.findByIdAndDelete(user._id)
+        ]);
+        
         res.status(200).json({ message: "User delated sucessfully" });
     } catch (error) {
         console.log("Error in deleteUser", error);
@@ -49,14 +53,16 @@ export const toggleLike = async (req, res) => {
         }
 
        const alreadyLiked = currentUser.likedSongs.some(id => id.equals(song._id));
-        if(alreadyLiked){
-            // Disliking
-            currentUser.likedSongs.pull(song._id);
-            song.likes = Math.max((song.likes || 0) - 1, 0);
-        } else{
+        if(!alreadyLiked){
             // Liking
+            song.likedBy.push(currentUser._id);
             currentUser.likedSongs.push(song._id);
             song.likes = (song.likes || 0) + 1;
+        } else{
+            // Disliking
+            song.likedBy.pull(currentUser._id);
+            currentUser.likedSongs.pull(song._id);
+            song.likes = Math.max((song.likes || 0) - 1, 0);
         }
 
         await Promise.all([
