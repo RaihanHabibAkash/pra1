@@ -158,13 +158,13 @@ export const getLikedSongs = async (req, res) => {
             return res.status(400).json({ message: "Error in getLiked Somgs" });
         }
 
-        const songs = await Song.find({ likedBy: userId }).populate("likedBy").sort({ createdAt: -1 });
-
+        const songs = await Song.find({ likedBy: userId })
+        .populate("likedBy").sort({ createdAt: -1 });
         if(songs.length === 0){
             return res.status(404).json({ message: "No Songs found" });
         }
 
-        res.status(200).json({ likedSong: songs });
+        res.status(200).json({ likedSongs: songs });
     } catch (error) {
         console.error("Error in getMadeForYouSongs:", error);
         res.status(500).json({ message: "Internal Server Error" });
