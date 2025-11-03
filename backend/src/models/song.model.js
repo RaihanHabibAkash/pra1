@@ -32,9 +32,32 @@ const songSchema = new mongoose.Schema({
     genre: {
         type: String,
         enum: [
-            "English", "Bangla", "Urdu", "Music",
-            "Arbi", "Hindi", "Spenish", "French", "Others"
-            ],
+            "Pop",
+            "Rock",
+            "Hip Hop",
+            "R&B",
+            "Electronic",
+            "Jazz",
+            "Country",
+            "Classical",
+            "Reggae",
+            "Indie"
+        ],
+        required: true
+    },
+    language: {
+        type: String,
+        enum: [
+            "English", 
+            "Bangla", 
+            "Urdu",
+            "Arbi", 
+            "Hindi", 
+            "Spenish", 
+            "French", 
+            "Music", 
+            "Others"
+        ],
         required: true
     },
     albumId: {

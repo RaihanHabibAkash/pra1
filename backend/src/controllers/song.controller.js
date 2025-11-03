@@ -58,7 +58,6 @@ export const getMadeForYouSongs = async (req, res) => {
             const likedSongIds = currentUserLikes.likedSongs.map(song => song._id);
             // User liked songs genre playlist
             const likedGenres = [...new Set(currentUserLikes.likedSongs.map(song => song.genre))];
-            // User liked songs artist playlist
             const likedArtist = [...new Set(currentUserLikes.likedSongs.map(song => song.artist))];
 
             songs = await Song.aggregate([

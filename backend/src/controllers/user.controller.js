@@ -21,8 +21,12 @@ export const deleteUser = async (req, res) => {
         if(!userId){
             return res.status(400).json({ message: "Not found" });
         }
-
-        await User.findByIdAndDelete(userId);
+        const user = await User.findOne({ clerkId: userId });
+        if(!user){
+            return res.status(400).json({ message: "Not found" });
+        }
+        user.pull(user._id);
+        await user.save();
         res.status(200).json({ message: "User delated sucessfully" });
     } catch (error) {
         console.log("Error in deleteUser", error);

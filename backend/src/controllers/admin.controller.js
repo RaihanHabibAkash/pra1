@@ -28,9 +28,9 @@ const deleteInCloudinary = async (public_id, resource_type = "video") => {
 
 export const createSong = async (req, res) => {
     try {
-        const { title, artist, duration, genre, albumId } = req.body;
-        if(!title || !artist || !duration || !genre){
-            return res.status(400).json({ message: "Title, Artist , Duration and genre are required" });
+        const { title, artist, duration, genre,language , albumId } = req.body;
+        if(!title || !artist || !duration || !genre || !language){
+            return res.status(400).json({ message: "Title, Artist , Duration, genre and language are required" });
         }
         if(isNaN(duration)){
             return res.status(400).json({ message: "Duration must be a Number" }); 
@@ -55,6 +55,7 @@ export const createSong = async (req, res) => {
             audioPublicId: audioRef.publicId,
             duration,
             genre,
+            language,
             albumId: albumId || null
         });
         await song.save();
