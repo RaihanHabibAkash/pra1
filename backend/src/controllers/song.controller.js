@@ -47,7 +47,7 @@ export const getMadeForYouSongs = async (req, res) => {
     try {
         const userId = req.auth?.userId;
         // Gives the all fields of the liked song
-        const currentUserLikes = await User.findById(userId).populate("likedSongs");
+        const currentUserLikes = await User.findOne({ clerkId: userId }).populate("likedSongs");
         if(!currentUserLikes){
             console.log("You are not LogedIn", error);
             return res.status(400).json({ message: "Unauthorized" });
@@ -59,6 +59,7 @@ export const getMadeForYouSongs = async (req, res) => {
             // User liked songs genre playlist
             const likedGenres = [...new Set(currentUserLikes.likedSongs.map(song => song.genre))];
             const likedArtist = [...new Set(currentUserLikes.likedSongs.map(song => song.artist))];
+            const likedLanguage = [...new Set(currentUserLikes.likedSongs.map(song => song.language))];
 
             songs = await Song.aggregate([
                 {
@@ -66,7 +67,8 @@ export const getMadeForYouSongs = async (req, res) => {
                         $or: [
                             // For genre or artist of only liked genre or liked artist song
                             { genre: { $in: likedGenres } },
-                            { artist: { $in: likedArtist } }
+                            { artist: { $in: likedArtist } },
+                            { language: { $in: likedLanguage } }
                         ],
                         // Chose exept liked songs 
                         _id: { $nin: likedSongIds }
@@ -87,7 +89,7 @@ export const getMadeForYouSongs = async (req, res) => {
             ]);
 
             // If there is no liked songs will fetch random songs
-            if(songs.length == 0){
+            if(songs.length === 0){
                 songs = await Song.aggregate([
                     {
                         $sample: {
