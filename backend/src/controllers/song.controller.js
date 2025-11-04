@@ -87,6 +87,40 @@ export const getMadeForYouSongs = async (req, res) => {
                 }
             ]);
         }
+
+        // Matched played songs
+        const viewedSongs = await Song.find({ playedBy: currentUserLikes._id });
+        const playedSongsIds = viewedSongs.map(song => song._id);
+        const playedGenre = [...new Set(viewedSongs.map(song => song.genre))];
+        const playedArtist = [...new Set(viewedSongs.map(song => song.artist))];
+        const playedLanguage = [...new Set(viewedSongs.map(song => song.language))];
+        if(songs.length === 0){
+            songs = await Song.aggregate([
+                {
+                    $match: {
+                        $or: [
+                            { genre: { $in: playedGenre } },
+                            { artist: { $in: playedArtist } },
+                            { language: { $in: playedLanguage } }
+                        ], 
+                        _id: { $nin: playedSongsIds }
+                    }
+                },
+                {
+                    $limit: 10
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        title: 1,
+                        artist: 1,
+                        imageUrl: 1,
+                        audioUrl: 1               
+                    }
+                }
+            ]);
+        }
+
         // If there is no liked songs will fetch random songs
         if(songs.length === 0){
             songs = await Song.aggregate([
