@@ -27,7 +27,7 @@ export const deleteUser = async (req, res) => {
         }
                 
         await Promise.all([
-            Song.updateMany({}, {$pull: {likedBy: user._id}}),
+            Song.updateMany({}, { $pull: { likedBy: user._id, playedBy: user._id } }),
             User.findByIdAndDelete(user._id)
         ]);
         
