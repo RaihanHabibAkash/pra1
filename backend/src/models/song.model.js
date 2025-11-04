@@ -76,11 +76,11 @@ const songSchema = new mongoose.Schema({
         default: 0,
         required: false
     },
-    playCount: {
-        type: Number,
-        default: 0,
+    playedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true
-    },
+    }],
 }, {timestamps: true});
 
 export const Song = mongoose.model("Song", songSchema);

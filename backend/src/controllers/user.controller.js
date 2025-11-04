@@ -52,7 +52,7 @@ export const toggleLike = async (req, res) => {
             return res.status(404).json({ message: "Did not found song or user"});          
         }
 
-       const alreadyLiked = currentUser.likedSongs.some(id => id.equals(song._id));
+       const alreadyLiked = currentUser.likedSongs.some(s => s.equals(song._id));
         if(!alreadyLiked){
             // Liking
             song.likedBy.push(currentUser._id);
@@ -67,13 +67,14 @@ export const toggleLike = async (req, res) => {
 
         await Promise.all([
             song.save(),
-            currentUser.save()
+            currentUser.save(),
+            song.populate("likedBy")
         ]);
 
         res.status(200).json({
             likes: song.likes,
             liked: !alreadyLiked,
-            likedSongs: currentUser.likedSongs
+            likedByUsers: song.likedBy
         });
     } catch (error) {
         console.error("Error in toggleLike", error);

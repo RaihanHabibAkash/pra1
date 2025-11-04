@@ -15,6 +15,42 @@ export const getAllSongs = async (req, res) => {
     }
 };
 
+export const addToSongCount = async (req, res) => {
+    try {
+        const userId = req.auth?.userId;
+        const { id } = req.params;
+
+        const user = await User.findOne({ clerkId: userId });
+        const song = await Song.findById(id);
+
+        if(!userId || !user){
+            return res.status(400).json({ message: "User not found in addToSongCount" });
+        }
+        if(!id || !song){
+            return res.status(404).json({ message: "Song not found in addToSongCount" });
+        }
+
+        // u => user
+        const alreadyPlayed = song.playedBy?.some(u => u.equals(user._id));
+
+        if(!alreadyPlayed){
+            song.playedBy.push(user._id);
+            await song.save();
+        }
+
+        await song.populate("playedBy");
+
+        res.status(200).json({
+            playedByUsers: song.playedBy, 
+            totalCounts: song.playedBy.length
+        });
+
+    } catch (error) {
+        console.log("Error in getAllSongs", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
 export const getFeaturedSongs = async (req, res) => {
     try {
         const songs = await Song.aggregate([
@@ -36,7 +72,7 @@ export const getFeaturedSongs = async (req, res) => {
         if(songs.length == 0){
             return res.status(404).json({ message: "Songs Not Found" });
         }
-        res.status(200).json({songs});
+        res.status(200).json({ songs });
     } catch (error) {
         console.log("Error in getAllSongs", error);
         res.status(500).json({ message: "Internal Server Error" });
