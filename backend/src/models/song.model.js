@@ -35,6 +35,12 @@ const songSchema = new mongoose.Schema({
         default: [],
         required: false
     }],
+    playedBy: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        default: [],
+        required: true
+    }],
     genre: {
         type: String,
         enum: [
@@ -76,11 +82,12 @@ const songSchema = new mongoose.Schema({
         default: 0,
         required: false
     },
-    playedBy: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true
-    }],
+    playCount: {
+        type: Number,
+        default: 0,
+        required: false
+    }
+    
 }, {timestamps: true});
 
 export const Song = mongoose.model("Song", songSchema);

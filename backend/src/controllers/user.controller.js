@@ -109,7 +109,23 @@ export const addToRecentlyPlayed = async (req, res) => {
 
     await user.save();
     await user.populate("recentlyPlayed");
-    res.status(200).json({ recentlyPlayedSongs: user.recentlyPlayed });
+
+    // u => user
+    const alreadyPlayed = song.playedBy?.some(u => u.equals(user._id));
+
+    if(!alreadyPlayed){
+        song.playedBy.push(user._id);
+        song.playCount = (song.playCount || 0) + 1;
+        await song.save();
+    }
+        
+    await song.populate("playedBy");
+
+    res.status(200).json({ 
+        recentlyPlayedSongs: user.recentlyPlayed,
+        playedByUsers: song.playedBy, 
+        totalCounts: song.playedBy.length
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

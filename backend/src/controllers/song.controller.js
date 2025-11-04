@@ -15,42 +15,6 @@ export const getAllSongs = async (req, res) => {
     }
 };
 
-export const addToSongCount = async (req, res) => {
-    try {
-        const userId = req.auth?.userId;
-        const { id } = req.params;
-
-        const user = await User.findOne({ clerkId: userId });
-        const song = await Song.findById(id);
-
-        if(!userId || !user){
-            return res.status(400).json({ message: "User not found in addToSongCount" });
-        }
-        if(!id || !song){
-            return res.status(404).json({ message: "Song not found in addToSongCount" });
-        }
-
-        // u => user
-        const alreadyPlayed = song.playedBy?.some(u => u.equals(user._id));
-
-        if(!alreadyPlayed){
-            song.playedBy.push(user._id);
-            await song.save();
-        }
-
-        await song.populate("playedBy");
-
-        res.status(200).json({
-            playedByUsers: song.playedBy, 
-            totalCounts: song.playedBy.length
-        });
-
-    } catch (error) {
-        console.log("Error in getAllSongs", error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-}
-
 export const getFeaturedSongs = async (req, res) => {
     try {
         const songs = await Song.aggregate([
@@ -85,10 +49,9 @@ export const getMadeForYouSongs = async (req, res) => {
         // Gives the all fields of the liked song
         const currentUserLikes = await User.findOne({ clerkId: userId }).populate("likedSongs");
         if(!currentUserLikes){
-            console.log("You are not LogedIn", error);
             return res.status(400).json({ message: "Unauthorized" });
         }
-        let songs;
+        let songs = [];
 
         if(currentUserLikes.likedSongs.length > 0){
             const likedSongIds = currentUserLikes.likedSongs.map(song => song._id);
@@ -123,29 +86,29 @@ export const getMadeForYouSongs = async (req, res) => {
                     }
                 }
             ]);
-
-            // If there is no liked songs will fetch random songs
-            if(songs.length === 0){
-                songs = await Song.aggregate([
-                    {
-                        $sample: {
-                            size: 4
-                        }
-                    },
-                    {
-                        $project: {
-                            _id: 1,
-                            title: 1,
-                            artist: 1,
-                            imageUrl: 1,
-                            audioUrl: 1
-                        }
-                    }
-                ]);
-            }
-
         }
-        if(songs.length == 0){
+        // If there is no liked songs will fetch random songs
+        if(songs.length === 0){
+            songs = await Song.aggregate([
+                {
+                    $sample: {
+                        size: 10
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        title: 1,
+                        artist: 1,
+                        imageUrl: 1,
+                        audioUrl: 1
+                    }
+                }
+            ]);
+        }
+
+        // If there is no songs
+        if(songs.length === 0){
             return res.status(404).json({ message: "Songs not found" });
         }
         res.status(200).json({ songs });
@@ -187,6 +150,103 @@ export const getTrendingSongs = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export const matchedGenre = async (req, res) => {
+    try {
+        let songs = [];
+        
+        const userId = req.auth?.userId;
+        const user = await User.findOne({ clerkId: userId }).populate("likedSongs");
+        if(!userId || !user){
+            return res.status(400).json({ message: "User not found in matchedGenre" });
+        }
+
+        // Matched liked genre songs
+        const likedSongIds = user.likedSongs.map(song => song._id);
+        const likedGenre = [...new Set(user.likedSongs.map(song => song.genre))];        
+        if(user.likedSongs.length > 0){
+            songs = await Song.aggregate([
+                {
+                    $match: {
+                        genre: { $in: likedGenre },
+                        _id: { $nin: likedSongIds }
+                    }
+                },
+                {
+                    $limit: 10
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        title: 1,
+                        artist: 1,
+                        imageUrl: 1,
+                        audioUrl: 1
+                    }
+                }
+            ]);
+        }
+
+        // Matched played genre songs
+        const viewedSongs = await Song.find({ playedBy: user._id });
+        const playedSongsIds = viewedSongs.map(song => song._id);
+        const playedGenre = [...new Set(viewedSongs.map(song => song.genre))];
+        if(songs.length === 0){
+            songs = await Song.aggregate([
+                {
+                    $match: {
+                        genre: { $in: playedGenre },
+                        _id: { $nin: playedSongsIds }
+                    }
+                },
+                {
+                    $limit: 10
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        title: 1,
+                        artist: 1,
+                        imageUrl: 1,
+                        audioUrl: 1               
+                    }
+                }
+            ]);
+        }
+
+        // If no liked songs will fetch 
+        if(songs.length === 0){
+            songs = await Song.aggregate([
+                {
+                    $sample: {
+                        size: 10
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        title: 1,
+                        artist: 1,
+                        imageUrl: 1,
+                        audioUrl: 1
+                    }
+                }
+            ]);
+        }
+
+        // If no songs
+        if(songs.length === 0){
+            return res.status(404).json({ message: "Songs not found on matchedGenre" });
+        }
+
+        res.status(200).json({ songs });
+    } catch (error) {
+        console.error("Error in matchedGenre", error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+// language
 
 export const getLikedSongs = async (req, res) => {
     try {
