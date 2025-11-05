@@ -60,91 +60,58 @@ export const getMadeForYouSongs = async (req, res) => {
             const likedArtist = [...new Set(currentUserLikes.likedSongs.map(song => song.artist))];
             const likedLanguage = [...new Set(currentUserLikes.likedSongs.map(song => song.language))];
 
-            songs = await Song.aggregate([
-                {
-                    $match: {
+            songs = await Song.find({
                         $or: [
                             // For genre or artist of only liked genre or liked artist song
                             { genre: { $in: likedGenres } },
                             { artist: { $in: likedArtist } },
                             { language: { $in: likedLanguage } }
                         ],
-                        // Chose exept liked songs 
                         _id: { $nin: likedSongIds }
-                    }
-                },
-                {
-                    $limit: 10
-                },
-                {
-                    $project: {
-                        _id: 1,
-                        title: 1,
-                        artist: 1,
-                        imageUrl: 1,
-                        audioUrl: 1
-                    }
-                }
-            ]);
+            }).sort({ createdAt: -1 }).limit(20);
         }
 
-        // Matched played songs
-        const viewedSongs = await Song.find({ playedBy: currentUserLikes._id });
-        const playedSongsIds = viewedSongs.map(song => song._id);
-        const playedGenre = [...new Set(viewedSongs.map(song => song.genre))];
-        const playedArtist = [...new Set(viewedSongs.map(song => song.artist))];
-        const playedLanguage = [...new Set(viewedSongs.map(song => song.language))];
-        if(songs.length === 0){
-            songs = await Song.aggregate([
-                {
-                    $match: {
-                        $or: [
-                            { genre: { $in: playedGenre } },
-                            { artist: { $in: playedArtist } },
-                            { language: { $in: playedLanguage } }
-                        ], 
-                        _id: { $nin: playedSongsIds }
-                    }
-                },
-                {
-                    $limit: 10
-                },
-                {
-                    $project: {
-                        _id: 1,
-                        title: 1,
-                        artist: 1,
-                        imageUrl: 1,
-                        audioUrl: 1               
-                    }
-                }
-            ]);
+        if(songs.length < 20){
+            // Matched played songs
+            const viewedSongs = await Song.find({ playedBy: currentUserLikes._id });
+            if(viewedSongs.length > 0){
+                const playedSongsIds = viewedSongs.map(song => song._id);
+                const playedGenre = [...new Set(viewedSongs.map(song => song.genre))];
+                const playedArtist = [...new Set(viewedSongs.map(song => song.artist))];
+                const playedLanguage = [...new Set(viewedSongs.map(song => song.language))];
+        
+                let moreSongs = await Song.find({
+                            $or: [
+                                { genre: { $in: playedGenre } },
+                                { artist: { $in: playedArtist } },
+                                { language: { $in: playedLanguage } }
+                            ], 
+                            _id: { $nin: playedSongsIds }
+                }).sort({ createdAt: -1 }).limit(20);
+                
+                songs = [...songs, ...moreSongs];
+                songs = songs.filter((song, index, arr) => 
+                    index === arr.findIndex(s => s._id.toString() === song._id.toString())
+                );
+            }
         }
 
         // If there is no liked songs will fetch random songs
-        if(songs.length === 0){
-            songs = await Song.aggregate([
-                {
-                    $sample: {
-                        size: 10
-                    }
-                },
-                {
-                    $project: {
-                        _id: 1,
-                        title: 1,
-                        artist: 1,
-                        imageUrl: 1,
-                        audioUrl: 1
-                    }
-                }
-            ]);
+        if(songs.length < 20){
+            let randomSongs = await Song.find({
+                _id: { $nin: songs.map(song => song._id) }            
+            }).sort({ createdAt: -1 }).limit(20);
+
+        songs = [...songs, ...randomSongs];
+        songs = songs.filter((song, index, arr) => 
+            index === arr.findIndex(s => s._id.toString() === song._id.toString()));
         }
 
         // If there is no songs
         if(songs.length === 0){
             return res.status(404).json({ message: "Songs not found" });
         }
+        songs = songs.slice(0 , 20)
         res.status(200).json({ songs });
     } catch (error) {
         console.error("Error in getMadeForYouSongs:", error);
