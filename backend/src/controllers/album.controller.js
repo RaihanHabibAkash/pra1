@@ -93,3 +93,11 @@ export const deleteAlbum = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error })
     }
 }
+
+export const addToAlbum = async (req, res) => {
+
+}
+
+export const removeFromAlbum = async (req, res) => {
+    
+}

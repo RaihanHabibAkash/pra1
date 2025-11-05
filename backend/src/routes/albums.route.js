@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createAlbum, deleteAlbum, getAlbumById, getAlbums } from "../controllers/album.controller.js";
+import { addToAlbum, createAlbum, deleteAlbum, getAlbumById, getAlbums, removeFromAlbum } from "../controllers/album.controller.js";
 import { protectRoute } from "../middlewere/auth.middlewere.js";
 
 const router = Router();
