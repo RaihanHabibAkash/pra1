@@ -114,7 +114,7 @@ export const getMadeForYouSongs = async (req, res) => {
         songs = songs.slice(0 , 20)
         res.status(200).json({ songs });
     } catch (error) {
-        console.error("Error in getMadeForYouSongs:", error);
+        console.error("Error in getMadeForYouSongs", error);
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
