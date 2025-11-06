@@ -1,4 +1,5 @@
-import { Album } from "../models/album.model.js"
+import { Album } from "../models/album.model.js";
+import { Song } from "../models/song.model.js";
 
 export const getAlbums = async (req, res) => {
     try {
@@ -67,20 +68,6 @@ export const deleteAlbum = async (req, res) => {
             return res.status(404).json({ message: "Album not found" });
         }
 
-        // Finding Songs of the Album
-        const songs = await Song.find({ albumId: id });
-        // Delete Song of Album in Cloudinary
-        if(songs.length > 0){
-            await Promise.all(
-                songs.flatMap(
-                    song => [
-                        song.imagePublicId && deleteInCloudinary(song.imagePublicId, "image"),
-                        song.audioPublicId && deleteInCloudinary(song.audioPublicId, "video"),])
-            )
-        }
-        // MongoDB deletation for Songs in Album
-        await Song.deleteMany({ albumId: id });
-
         // Delete Album Image in Cloudinary
         if(album.imagePublicId){
             await deleteInCloudinary(album.imagePublicId, "image");
@@ -95,7 +82,11 @@ export const deleteAlbum = async (req, res) => {
 }
 
 export const addToAlbum = async (req, res) => {
-
+    try {
+        
+    } catch (error) {
+        
+    }
 }
 
 export const removeFromAlbum = async (req, res) => {
