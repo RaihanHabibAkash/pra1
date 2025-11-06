@@ -83,7 +83,31 @@ export const deleteAlbum = async (req, res) => {
 
 export const addToAlbum = async (req, res) => {
     try {
-        
+        const { songId } = req.params;
+        const song = await Song.findById(songId);
+        if(!songId || !song){
+            return res.status(404).json({ message: "Song not found in addToAlbum" });
+        }
+
+        const { albumId } = req.body;
+        const album = await Album.findById(albumId);
+        if(!albumId || !album){
+            return res.status(404).json({ message: "Album not found" });
+        }
+
+        // Adding Songs to album
+        if(!album.songs.equals(song._id)){
+            album.songs.push(song._id);
+            await album.save();
+        }
+
+        if(song.albumId.toString() === album._id.toString()){
+            song.albumId = album._id;
+            await album.save();
+        }
+
+
+
     } catch (error) {
         
     }
