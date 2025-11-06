@@ -41,6 +41,9 @@ export const createAlbum = async (req, res) => {
         }
         const imageFile = req.files.imageFile;
         const imageRef = await uploadToCloudinary(imageFile);
+        if(imageRef){
+            return res.status(400).json({ message: "Error in create Album up" });
+        }
 
         const album = new Album({
             title,
@@ -51,7 +54,7 @@ export const createAlbum = async (req, res) => {
         });
 
         await album.save();
-        res.status(201).json({ message: "Album Created sucessfully", createdAlbum: album });
+        res.status(201).json({ message: "Album Created successfully", createdAlbum: album });
     } catch (error) {
         console.log("Error while Creating Album", error);
         res.status(500).json({ message: "Internal Server Error", error });
@@ -77,42 +80,84 @@ export const deleteAlbum = async (req, res) => {
         res.status(200).json({ message: "Album Delted sucessfully", deletedAlbum: album });
     } catch (error) {
         console.log("Error while Deleting Album", error);
-        res.status(500).json({ message: "Internal Server Error", error })
+        res.status(500).json({ message: "Internal Server Error", error });
     }
 }
 
 export const addToAlbum = async (req, res) => {
     try {
-        const { songId } = req.params;
+        const { songId, albumId } = req.params;
         const song = await Song.findById(songId);
         if(!songId || !song){
             return res.status(404).json({ message: "Song not found in addToAlbum" });
         }
 
-        const { albumId } = req.body;
         const album = await Album.findById(albumId);
-        if(!albumId || !album){
-            return res.status(404).json({ message: "Album not found" });
+
+        // Create album
+        if(!album){
+            const { title, artist, releaseYear } = req.body;
+            if(!title || !artist || !releaseYear){
+                return res.status(400).json({ message: "Title, Artist, Release-year are required" });
+            }
+
+            if(!req.files || !req.files.imageFile){
+                return res.status(400).json({ message: "Submit Image file"})
+            }
+            const imageFile = req.files.imageFile;
+            const imageRef = await uploadToCloudinary(imageFile);
+
+            const album = new Album({
+                title,
+                artist,
+                imageUrl: imageRef.url,
+                imagePublicId: imageRef.publicId,
+                releaseYear
+            });
+
+            await album.save();    
         }
 
         // Adding Songs to album
-        if(!album.songs.equals(song._id)){
+        if(!album.songs.some(song => song.equals(song._id))){
             album.songs.push(song._id);
             await album.save();
         }
 
-        if(song.albumId.toString() === album._id.toString()){
+        if(song.albumId.toString() !== album._id.toString()){
             song.albumId = album._id;
             await album.save();
         }
 
-
-
+        res.status(200).json({ message: `Add to ${album.title}  Album` });
     } catch (error) {
-        
+        console.log("Error with addToAlbum", error);
+        res.status(500).json({ message: "Internal Server Error", error });
     }
 }
 
 export const removeFromAlbum = async (req, res) => {
-    
+    try {
+        const { songId } = req.params;
+        const song = await Song.findById(songId);
+        if(!songId || !song){
+            return res.status(404).json({ message: "Song not found in removeFromAlbum" });
+        }
+
+        const { albumId } = req.body;
+        const album = await Album.findById(albumId);
+        if(!albumId || !album){
+            return res.status(404).json({ message: "Album not found in removeAlbum" });
+        }
+        
+        if(album.songs.some(song => song.push(song._id))){
+            album.songs.pull(song._id);
+            await album.save();
+            
+            res.status(200).json({ message: `${song.title} deleted sucesssfully` });
+        }
+    } catch (error) {
+        console.log("Error with removeFromAlbum", error);
+        res.status(500).json({ message: "Internal Server Error", error });
+    }
 }
