@@ -123,24 +123,34 @@ export const addToAlbum = async (req, res) => {
 
 export const removeFromAlbum = async (req, res) => {
     try {
-        const { songId } = req.params;
+        const { albumId, songId } = req.params;
+        if(!songId || !albumId){
+            return res.status(400).json({ message: "Params not found in removeFromAlbum" });
+        }
+
         const song = await Song.findById(songId);
-        if(!songId || !song){
+        if(!song){
             return res.status(404).json({ message: "Song not found in removeFromAlbum" });
         }
 
-        const { albumId } = req.body;
         const album = await Album.findById(albumId);
-        if(!albumId || !album){
+        if(!album){
             return res.status(404).json({ message: "Album not found in removeAlbum" });
         }
         
-        if(album.songs.some(song => song.push(song._id))){
+        // Deleting song from album
+        if(album.songs.some(s => s.equals(song._id))){
             album.songs.pull(song._id);
             await album.save();
-            
-            res.status(200).json({ message: `${song.title} deleted sucesssfully` });
         }
+
+        // Deleting albumId from song
+        if(song.albumId.some(s => s.quals(song._id))){
+            song.albumId.pull(album._id);
+            await song.save();
+        }
+
+        res.status(200).json({ message: `${song.title} deleted sucesssfully from ${album.title}` });
     } catch (error) {
         console.log("Error with removeFromAlbum", error);
         res.status(500).json({ message: "Internal Server Error", error });
