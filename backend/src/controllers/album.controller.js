@@ -40,6 +40,7 @@ export const createAlbum = async (req, res) => {
             return res.status(400).json({ message: "Submit Image file"})
         }
         const imageFile = req.files.imageFile;
+
         const imageRef = await uploadToCloudinary(imageFile);
         if(imageRef){
             return res.status(400).json({ message: "Error in create Album up" });
@@ -52,7 +53,6 @@ export const createAlbum = async (req, res) => {
             imagePublicId: imageRef.publicId,
             releaseYear
         });
-
         await album.save();
         res.status(201).json({ message: "Album Created successfully", createdAlbum: album });
     } catch (error) {
@@ -87,46 +87,31 @@ export const deleteAlbum = async (req, res) => {
 export const addToAlbum = async (req, res) => {
     try {
         const { songId, albumId } = req.params;
+        if(!songId || !albumId){
+            return res.status(400).json({ message: "Params not found in addToAlbum"})
+        }
+        
         const song = await Song.findById(songId);
-        if(!songId || !song){
+        if(!song){
             return res.status(404).json({ message: "Song not found in addToAlbum" });
         }
 
-        const album = await Album.findById(albumId);
+        let album = await Album.findById(albumId);
 
         // Create album
         if(!album){
-            const { title, artist, releaseYear } = req.body;
-            if(!title || !artist || !releaseYear){
-                return res.status(400).json({ message: "Title, Artist, Release-year are required" });
-            }
-
-            if(!req.files || !req.files.imageFile){
-                return res.status(400).json({ message: "Submit Image file"})
-            }
-            const imageFile = req.files.imageFile;
-            const imageRef = await uploadToCloudinary(imageFile);
-
-            const album = new Album({
-                title,
-                artist,
-                imageUrl: imageRef.url,
-                imagePublicId: imageRef.publicId,
-                releaseYear
-            });
-
-            await album.save();    
+           return res.status(404).json({ message: "Album not found" });
         }
 
         // Adding Songs to album
-        if(!album.songs.some(song => song.equals(song._id))){
+        if(!album.songs.some(s => s.equals(song._id))){
             album.songs.push(song._id);
             await album.save();
         }
 
-        if(song.albumId.toString() !== album._id.toString()){
-            song.albumId = album._id;
-            await album.save();
+        if(!song.albumId.some(s => s.equals(album._id))){
+            song.albumId.push(album._id);
+            await song.save();
         }
 
         res.status(200).json({ message: `Add to ${album.title}  Album` });
