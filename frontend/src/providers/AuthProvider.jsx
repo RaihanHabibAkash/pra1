@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/lib/axiosConnect';
+import { axiosInstance } from '@/lib/axiosConnect.js';
 import { useAuth } from '@clerk/clerk-react';
 import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
@@ -34,7 +34,7 @@ const AuthProvider = ({ children }) => {
 
   if(isLoading){
     return (
-      <div className="w-screen h-screen flex justify-center items-center bg-white">
+      <div className="w-screen h-screen flex justify-center items-center">
         <Loader className="w-12 h-12 text-white animate-spin" />
       </div>
     );
