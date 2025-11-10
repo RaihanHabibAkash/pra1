@@ -145,7 +145,7 @@ export const removeFromAlbum = async (req, res) => {
         }
 
         // Deleting albumId from song
-        if(song.albumId.some(s => s.quals(song._id))){
+        if(song.albumId.some(a => a.equals(song._id))){
             song.albumId.pull(album._id);
             await song.save();
         }
