@@ -35,11 +35,13 @@ const AuthProvider = ({ children }) => {
   if(isLoading){
     return (
       <div className="w-screen h-screen flex justify-center items-center">
-        <Loader className="size-16 text-white animate-spin" />
+        <Loader className="size-16 text-indigo-600 animate-spin" />
       </div>
     );
   } else {
-    return (<div>{children}</div>);
+    return (
+      <div>{children}</div>
+    );
   }
 
 }

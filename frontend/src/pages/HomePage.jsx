@@ -1,10 +1,11 @@
 import React from 'react';
+import TopBar from './Components/TopBar.jsx';
 
 const HomePage = () => {
   return (
-    <div>
-      Home
-    </div>
+    <>
+      <TopBar />
+    </>
   );
 }
 
