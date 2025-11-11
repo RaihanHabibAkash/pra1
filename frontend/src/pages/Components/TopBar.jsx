@@ -27,11 +27,16 @@ const TopBar = () => {
       <div className="flex items-center gap-2">
         {isAdmin && (
         <Link to={"/admin"}>
-            <LayoutDashboardIcon className="m-4" />
+            <LayoutDashboardIcon className="mr-8 size-7" />
         </Link>
       )}
-        <img src="../public/photos/logo.png" alt="Ash Music Player Logo" className="h-10" />
-        <p>Music Player</p>
+        <div className="flex items-center gap-2">
+          <a href="https://github.com/RaihanHabibAkash" target="_blank">
+            <img src="../public/photos/logo.png" alt="Ash Music Player Logo" className="h-8" />
+          </a>
+            <p className="text-base">Music Player</p>
+        </div>
+        
       </div>
 
       
