@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import { clerkMiddleware } from "@clerk/express";
 import fileUpload from "express-fileupload";
+import cors from "cors";
 
 // build in node module
 import path from "path";
@@ -20,6 +21,12 @@ import { connectionDB } from "./lib/db.js";
 dotenv.config();
 const PORT = process.env.PORT || 7000;
 const app = express();
+
+// Cross Origin
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
 
 // Current file directory
 const __dirname = path.resolve();
