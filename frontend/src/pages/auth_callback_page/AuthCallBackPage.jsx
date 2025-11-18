@@ -18,7 +18,7 @@ const AuthCallBackPage = () => {
         }
 
         await axiosInstance.post("/auth/callback", {
-          id: user._id,
+          id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
           imageUrl: user.imageUrl
@@ -29,20 +29,20 @@ const AuthCallBackPage = () => {
       } catch (error) {
         console.log("Error in AuthCallBackPage", error);
       } finally {
-        navigate("/")
+        navigate("/");
       }
 
-      syncUser();
     }
 
-  }, [ user, isLoaded, syncAttempted, navigate ] );
+    syncUser();
+  }, [ user, isLoaded, navigate ] );
 
   return (
     <div className="w-full h-screen bg-black flex justify-center items-center">
       <Card className="w-[80%] max-w-md bg-zinc-800 border-green-500">
         <CardContent className="flex flex-col items-center gap-8">
           <Loader className="size-8 text-green-500 animate-spin" />
-          <h3 className="text-md">Logging you in</h3>
+          <h3 className="text-lg">Logging you in</h3>
         </CardContent>
       </Card>
     </div>
