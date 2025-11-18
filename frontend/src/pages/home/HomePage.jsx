@@ -1,5 +1,5 @@
 import React from 'react';
-import TopBar from './Components/TopBar.jsx';
+import TopBar from '../Components/TopBar/TopBar.jsx';
 
 const HomePage = () => {
   return (

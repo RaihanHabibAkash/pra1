@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import AuthCallBackPage from "./pages/AuthCallBackPage.jsx";
-import HomePage from "./pages/HomePage.jsx";
+import AuthCallBackPage from "./pages/auth_callback_page/AuthCallBackPage.jsx";
+import HomePage from "./pages/home/HomePage.jsx";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
 
 function App() {
@@ -17,4 +17,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
