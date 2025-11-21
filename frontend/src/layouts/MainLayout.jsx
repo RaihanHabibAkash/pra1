@@ -28,7 +28,7 @@ const MainLayout = () => {
             
 
                 {/* Right Side */}
-            <ResizablePanel defaultSize={isMobile ? 100 : 80}>
+            <ResizablePanel defaultSize={isMobile ? 100 : 75}>
                 <Outlet />
             </ResizablePanel>
         </ResizablePanelGroup>

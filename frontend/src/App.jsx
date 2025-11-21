@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import AuthCallBackPage from "./pages/auth_callback_page/AuthCallBackPage.jsx";
 import HomePage from "./pages/home/HomePage.jsx";
 import { AuthenticateWithRedirectCallback } from "@clerk/clerk-react";
+import MainLayout from "./layouts/MainLayout.jsx";
 
 function App() {
 
