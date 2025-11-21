@@ -14,7 +14,13 @@ const MainLayout = () => {
             {/* Left Side */}
 
             { isMobile ? (
-                <ToRightButton />
+                <>
+                    <ToRightButton />
+                    <ResizablePanel  defaultSize={0} minSize={0} maxSize={100}>
+                        <LeftSideBar />
+                    </ResizablePanel>
+                </>
+                
             ) : (
                 <>
                     <ResizablePanel  defaultSize={25} minSize={0} maxSize={35}>
