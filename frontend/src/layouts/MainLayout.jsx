@@ -2,9 +2,22 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/componen
 import { Outlet } from "react-router-dom";
 import LeftSideBar from "./components/LeftSideBar";
 import ToRightButton from "./components/ToRightButton";
+import { useEffect, useState } from "react";
 
 const MainLayout = () => {
-    const isMobile = false;
+    const [ isMobile, setIsMobile ] = useState(false);
+
+    useEffect(() => {
+        const checkSize = () => {
+            window.innerWidth < 768 ? setIsMobile(true) : setIsMobile(false)
+        }
+
+        checkSize();
+
+        window.addEventListener("resize", checkSize);
+        return () => window.removeEventListener("resize", checkSize);
+    }, [])
+
   return (
     <div className="h-screen text-white bg-black flex flex-col">
         <ResizablePanelGroup direction="horizontal" className="flex-1 flex h-full overflow-hidden p-2">
