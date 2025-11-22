@@ -13,11 +13,11 @@ const AuthCallBackPage = () => {
   useEffect(() => {
     const syncUser = async () => {
       try {
-        if(!user || !isLoaded || syncAttempted.current === true ) {
-          return
+        if(!user || !isLoaded || syncAttempted.current) {
+          return;
         }
 
-        await axiosInstance.post("/auth/callback", {
+        await axiosInstance.post("/auth-callback", {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,

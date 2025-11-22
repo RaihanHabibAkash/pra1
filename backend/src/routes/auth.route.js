@@ -3,6 +3,6 @@ import { authCallback } from "../controllers/auth.controller.js";
 
 const router = Router();
 
-router.post("/callback", authCallback);
+router.post("/", authCallback);
 
 export default router;
