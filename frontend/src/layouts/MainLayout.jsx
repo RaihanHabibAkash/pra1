@@ -4,7 +4,7 @@ import LeftSideBar from "./components/LeftSideBar";
 import ToRightButton from "./components/ToRightButton";
 
 const MainLayout = () => {
-    const isMobile = true;
+    const isMobile = false;
   return (
     <div className="h-screen text-white bg-black flex flex-col">
         <ResizablePanelGroup direction="horizontal" className="flex-1 flex h-full overflow-hidden p-2">
