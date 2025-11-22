@@ -5,9 +5,6 @@ import ToRightButton from "./components/ToRightButton";
 
 const MainLayout = () => {
     const isMobile = false;
-    if(isMobile){
-        return(null)
-    }
   return (
     <div className="h-screen text-white bg-black flex flex-col">
         <ResizablePanelGroup direction="horizontal" className="flex-1 flex h-full overflow-hidden p-2">
