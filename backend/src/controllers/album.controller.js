@@ -42,7 +42,7 @@ export const createAlbum = async (req, res) => {
         }
         const imageFile = req.files.imageFile;
 
-        const imageRef = await uploadToCloudinary(imageFile);
+        const imageRef = await uploadToCloudinary(imageFile, "image");
         if(imageRef){
             return res.status(400).json({ message: "Error in create Album up" });
         }
