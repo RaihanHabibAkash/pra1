@@ -1,30 +1,6 @@
-import cloudinary from "../lib/cloudinary.js";
 import { Song } from "../models/song.model.js";
 import { Album } from "../models/album.model.js";
-
-const uploadToCloudinary = async (file) => {
-    try {
-        const result = await cloudinary.uploader.upload(file.tempFilePath, {
-            resource_type: "auto"
-        }); 
-
-        return { url: result.secure_url,
-                 publicId: result.public_id,
-               }
-    } catch (error) {
-        console.log("Error while uploading in Cloudinary", error);
-        throw new Error(`Error while uploading in Cloudinary: ${error.message}`);
-    }
-}
-// resource_type = "video" => for default; can be use in both "audio" and "video" 
-const deleteInCloudinary = async (public_id, resource_type = "video") => {
-    try {
-        await cloudinary.uploader.destroy(public_id, { resource_type });
-    } catch (error) {
-        console.log("Error while delteing in Cloudinary", error);
-        throw new Error(`Error while deleteing in Cloudinary: ${error.message}`);
-    }
-}
+import { deleteInCloudinary, uploadToCloudinary } from "../middlewere/uploadToCloudinary.js";
 
 export const createSong = async (req, res) => {
     try {
@@ -42,8 +18,8 @@ export const createSong = async (req, res) => {
         const audioFile = req.files.audioFile;
         const imageFile = req.files.imageFile;
         const [ audioRef, imageRef ] = await Promise.all([
-            uploadToCloudinary(audioFile),
-            uploadToCloudinary(imageFile),
+            uploadToCloudinary(audioFile, "audio"),
+            uploadToCloudinary(imageFile, "image"),
         ]);
 
         const song = new Song({

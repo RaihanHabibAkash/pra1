@@ -39,13 +39,13 @@ const songSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         default: [],
-        required: false
+        required: true
     }],
     playedBy: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         default: [],
-        required: false
+        required: true
     }],
     genre: {
         type: String,
@@ -88,12 +88,12 @@ const songSchema = new mongoose.Schema({
     likes: {
         type: Number,
         default: 0,
-        required: false
+        required: true
     },
     playCount: {
         type: Number,
         default: 0,
-        required: false
+        required: true
     }
     
 }, {timestamps: true});
