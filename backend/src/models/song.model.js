@@ -59,7 +59,8 @@ const songSchema = new mongoose.Schema({
             "Country",
             "Classical",
             "Reggae",
-            "Indie"
+            "Indie",
+            "Others"
         ],
         required: true
         // not yet
