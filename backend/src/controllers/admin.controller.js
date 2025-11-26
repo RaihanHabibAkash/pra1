@@ -64,7 +64,7 @@ export const deleteSong = async (req, res) => {
         }
         if(song.audioPublicId && song.imagePublicId){
             await Promise.all([
-                deleteInCloudinary(song.audioPublicId, "video"),
+                deleteInCloudinary(song.audioPublicId, "audio"),
                 deleteInCloudinary(song.imagePublicId, "image"),
             ]);
 
