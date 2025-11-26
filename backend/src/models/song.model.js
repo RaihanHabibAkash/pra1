@@ -11,19 +11,25 @@ const songSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     imagePublicId: {
         type: String,
-        required: true
+        required: true,
+        unique: true
+        // not yet
     },
     audioUrl: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     audioPublicId: {
         type: String,
-        required: true
+        required: true,
+        unique: true
+        // not yet
     },
     duration: {
         type: Number,
@@ -39,7 +45,7 @@ const songSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         default: [],
-        required: true
+        required: false
     }],
     genre: {
         type: String,
@@ -56,6 +62,7 @@ const songSchema = new mongoose.Schema({
             "Indie"
         ],
         required: true
+        // not yet
     },
     language: {
         type: String,
@@ -71,6 +78,7 @@ const songSchema = new mongoose.Schema({
             "Others"
         ],
         required: true
+        // not yet
     },
     albumId: [{
         type: mongoose.Schema.Types.ObjectId,
