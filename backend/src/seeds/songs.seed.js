@@ -8,24 +8,25 @@ const songs = [
     {
 		title: "Stay With Me",
 		artist: "Sarah Mitchell",
-		imageUrl: "/cover-images/1.jpg",
-		audioUrl: "/songs/1.mp3",
-		duration: 46, 
+		imageUrl: "https://res.cloudinary.com/dqig9whl7/image/upload/v1745486748/wojs3vylznduczbgv7ye.jpg",
+		imagePublicId: "wojs3vylznduczbgv7ye",
+		audioUrl: "https://res.cloudinary.com/dqig9whl7/video/upload/v1745486747/oxaqb0lqfz745bjhe7h4.mp3",
+		audioPublicId: "oxaqb0lqfz745bjhe7h4",
+		duration: 279,
+		genre: "Pop",
+		language: "English"
 	},
 	{
 		title: "Midnight Drive",
 		artist: "The Wanderers",
-		imageUrl: "/cover-images/2.jpg",
-		audioUrl: "/songs/2.mp3",
-		duration: 41,
-	},
-	{
-		title: "Lost in Tokyo",
-		artist: "Electric Dreams",
-		imageUrl: "/cover-images/3.jpg",
-		audioUrl: "/songs/3.mp3",
-		duration: 24,
-	},
+		imageUrl: "https://res.cloudinary.com/dqig9whl7/image/upload/v1745486676/zwutxuxclpuy8g09r33g.jpg",
+		imagePublicId: "zwutxuxclpuy8g09r33g",
+		audioUrl: "https://res.cloudinary.com/dqig9whl7/video/upload/v1745486675/yiww3rn7qt2zocqzgcyd.mp3",
+		audioPublicId: "yiww3rn7qt2zocqzgcyd",
+		duration: 298,
+		genre: "Rock",
+		language: "Hindi"
+	}
 ];
 
 const seedSongs = async () => {
