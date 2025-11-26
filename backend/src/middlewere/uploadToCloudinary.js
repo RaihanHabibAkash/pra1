@@ -14,10 +14,6 @@ export const uploadToCloudinary = async (file, fileType) => {
             forResourceType = "video";
             forFolder = "Pra1/Audio";
 
-        } else if(fileType === "video") {
-            forResourceType = "video";
-            forFolder = "Pra1/Video";
-
         } else {
             throw new Error("Invalied file type");
         }
@@ -46,9 +42,6 @@ export const deleteInCloudinary = async (public_id, fileType) => {
             forResourceType = "image";
 
         } else if(fileType === "audio") {
-            forResourceType = "video";
-
-        } else if(fileType === "video") {
             forResourceType = "video";
 
         } else {
