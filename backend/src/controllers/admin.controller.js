@@ -76,13 +76,7 @@ export const deleteSong = async (req, res) => {
         if(!song){
             return res.status(404).json({ message: "Song not found" });
         }
-
-        console.log({
-                    audioPublicId: song.audioPublicId,
-                    imagePublicId: song.imagePublicId,
-                    songId: song._id
-                });
-        
+                
         if(song.albumId){
             await Album.findByIdAndUpdate(song.albumId, {
                 $pull: { songs: song._id } 
