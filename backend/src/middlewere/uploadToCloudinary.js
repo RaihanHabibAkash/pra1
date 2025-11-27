@@ -1,25 +1,19 @@
 import cloudinary from "../lib/cloudinary.js";
-import { User } from "../models/user.model.js";
 
+// Done
 export const uploadToCloudinary = async (file, fileType) => {
     try {
         let forResourceType = "";
         let forFolder = "";
 
-        const userId = req.auth;
-        const user = await User.findById(userId);
-        if(!user) {
-           return console.log("User not found in uploadToCloudinary");
-        }
-
         // Check File types
         if(fileType === "image") {
             forResourceType = "image";
-            forFolder = `Pra1/Img/${(user.fullName).trim()}`;
+            forFolder = "Pra1/Img";
 
         } else if(fileType === "audio") {
             forResourceType = "video";
-            forFolder = `Pra1/Audio/${(user.fullName).trim()}`;
+            forFolder = "Pra1/Audio";
 
         } else {
             throw new Error("Invalied file type");
@@ -40,7 +34,7 @@ export const uploadToCloudinary = async (file, fileType) => {
         throw new Error(`Error while uploading in Cloudinary: ${error.message}`);
     }
 }
-
+// Done
 export const deleteInCloudinary = async (public_id, fileType) => { 
     try {
         let forResourceType = "";
@@ -60,7 +54,7 @@ export const deleteInCloudinary = async (public_id, fileType) => {
         });
 
         if(result.result !== "ok") {
-            throw new Error(`count not delete the ${public_id} file: ${result.result}`);
+            throw new Error(`could not delete the ${public_id} file: ${result.result}`);
         }
     } catch (error) {
         console.log("Error while delteing in Cloudinary", error);

@@ -17,7 +17,7 @@ export const getAllSongs = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
-
+// Done
 export const createSong = async (req, res) => {
     try {
         const { title, artist, duration, genre, language , albumId } = req.body;
@@ -58,13 +58,17 @@ export const createSong = async (req, res) => {
             }) 
         }
 
-        res.status(201).json({ message: "Song Created Sucessfully", createdSong: song });
+        res.status(201).json({
+            success: true, 
+            message: "Song Created Sucessfully", 
+            createdSong: song 
+        });
     } catch (error) {
         console.log("Error while creating song", error);
         res.status(500).json({ message: "Internal server error", error });
     }
 };  
-
+// Done
 export const deleteSong = async (req, res) => {
     try {
         const { id } = req.params;
@@ -72,6 +76,12 @@ export const deleteSong = async (req, res) => {
         if(!song){
             return res.status(404).json({ message: "Song not found" });
         }
+
+        console.log({
+                    audioPublicId: song.audioPublicId,
+                    imagePublicId: song.imagePublicId,
+                    songId: song._id
+                });
         
         if(song.albumId){
             await Album.findByIdAndUpdate(song.albumId, {
@@ -84,8 +94,12 @@ export const deleteSong = async (req, res) => {
                 deleteInCloudinary(song.imagePublicId, "image"),
             ]);
 
-            await Song.findByIdAndDelete(id);
-            res.status(200).json({ message: "Song deleted successfully", deletedSong: song });
+            await Song.findByIdAndDelete(song._id);
+            res.status(200).json({
+                success: true, 
+                message: "Song deleted successfully", 
+                deletedSong: song 
+            });
         }     
     } catch (error) {
         console.log("Error while deleteing a Song", error);
@@ -111,7 +125,7 @@ export const getAllUsers = async (req, res) => {
         res.status(500).json({ message: "Internal server error"})
     }
 } 
-
+// Done
 export const deleteUser = async (req, res) => {
     try {
         const { userId } = req.params;
@@ -129,7 +143,11 @@ export const deleteUser = async (req, res) => {
             clerkClient.users.deleteUser(userId)
         ]);
         
-        res.status(200).json({ message: "User delated sucessfully" });
+        res.status(200).json({ 
+            success: true,
+            message: "User delated sucessfully",
+            deltedUser: user 
+        });
     } catch (error) {
         console.log("Error in deleteUser", error);
         res.status(500).json({ message: "Internal server error"})
