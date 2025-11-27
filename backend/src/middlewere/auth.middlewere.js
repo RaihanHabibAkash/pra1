@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 
 export const protectRoute = (req, res, next) => {
     if(!req.auth.userId){
-        res.status(401).json({message: "You must log in"})
+        return res.status(401).json({message: "You must log in"})
     }
     next();
 }
