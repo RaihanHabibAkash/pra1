@@ -21,7 +21,8 @@ const AuthCallBackPage = () => {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
-          imageUrl: user.imageUrl
+          imageUrl: user.imageUrl,
+          email: user.emailAddresses
         });
 
         // Api will be called for only one time.
