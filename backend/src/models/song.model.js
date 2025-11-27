@@ -18,7 +18,6 @@ const songSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-        // not yet
     },
     audioUrl: {
         type: String,
@@ -29,7 +28,6 @@ const songSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
-        // not yet
     },
     duration: {
         type: Number,
@@ -63,7 +61,6 @@ const songSchema = new mongoose.Schema({
             "Others"
         ],
         required: true
-        // not yet
     },
     language: {
         type: String,
@@ -79,7 +76,6 @@ const songSchema = new mongoose.Schema({
             "Others"
         ],
         required: true
-        // not yet
     },
     albumId: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -97,6 +93,6 @@ const songSchema = new mongoose.Schema({
         required: true
     }
     
-}, {timestamps: true});
+}, { timestamps: true });
 
 export const Song = mongoose.model("Song", songSchema);
