@@ -4,7 +4,7 @@ import { protectRoute } from "../middlewere/auth.middlewere.js";
 
 const router = Router();
 
-router.use(protectRoute);
+// router.use(protectRoute);
 
 router.get("/" , getAlbums);
 router.get("/:albumId", getAlbumById);
