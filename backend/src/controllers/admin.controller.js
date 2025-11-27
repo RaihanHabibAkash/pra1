@@ -38,7 +38,7 @@ export const createSong = async (req, res) => {
             uploadToCloudinary(imageFile, "image"),
         ]);
 
-        const song = new Song({
+        const song = await Song.create({
             title,
             artist,
             imageUrl: imageRef.url,
@@ -76,7 +76,7 @@ export const deleteSong = async (req, res) => {
         if(!song){
             return res.status(404).json({ message: "Song not found" });
         }
-                
+
         if(song.albumId){
             await Album.findByIdAndUpdate(song.albumId, {
                 $pull: { songs: song._id } 
