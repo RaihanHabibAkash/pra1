@@ -1,4 +1,4 @@
-import { clerkClient } from "@clerk/express"
+import { User } from "../models/user.model.js";
 
 export const protectRoute = (req, res, next) => {
     if(!req.auth.userId){
@@ -10,10 +10,16 @@ export const protectRoute = (req, res, next) => {
 
 export const requireAdmin = async (req, res, next) => {
     try {
-        const currentUser = await clerkClient.users.getUser(req.auth.userId);
-        const admins = process.env.EMAIL_ADDRESS.split(",").map(email => email.trim());
-        const isAdmin = admins.includes(currentUser.primaryEmailAddress?.emailAddress);
+        const id = req.auth.userId;
+        const user = await User.findOne({ clerkId: id });
+        if(!user) {
+            return res.status(400).json({ message: "You must log In" })
+        }
 
+        const adminEmails = process.env.EMAIL_ADDRESS;
+        const admins = adminEmails.split(",").map(email => email.trim());
+
+        const isAdmin = admins.includes(user.email);
         if(!isAdmin){
             return res.status(403).json({message: "You must be admin to access"});
         }

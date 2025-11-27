@@ -3,9 +3,12 @@ import { User } from "../models/user.model.js";
 
 export const authCallback = async (req, res) => {
     try {
-        const { id, firstName, lastName, imageUrl } = req.body;
-
         const currentUser = await clerkClient.users.getUser(req.auth.userId);
+
+        const id = currentUser.id;
+        const firstName = currentUser.firstName;
+        const lastName = currentUser.lastName;
+        const imageUrl = currentUser.imageUrl;
         const email = currentUser.primaryEmailAddress?.emailAddress;
 
         if(!id || !firstName || !lastName || !imageUrl || !email) {
