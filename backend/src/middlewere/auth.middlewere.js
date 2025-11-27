@@ -2,7 +2,7 @@ import { User } from "../models/user.model.js";
 
 export const protectRoute = (req, res, next) => {
     if(!req.auth.userId){
-        return res.status(401).json({message: "You must log in"})
+        return res.status(401).json({ message: "You must log in" })
     }
     next();
 }
@@ -21,11 +21,11 @@ export const requireAdmin = async (req, res, next) => {
 
         const isAdmin = admins.includes(user.email);
         if(!isAdmin){
-            return res.status(403).json({message: "You must be admin to access"});
+            return res.status(403).json({ message: "You must be admin to access" });
         }
         next();
     } catch (error) {
         console.log("Error in requireAdmin function", error);
-        res.status(500).json({message: "Internal Server error"});
+        res.status(500).json({ message: "Internal Server error" });
     }
 }
