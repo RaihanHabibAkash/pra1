@@ -15,7 +15,7 @@ export const requireAdmin = async (req, res, next) => {
         const isAdmin = admins.includes(currentUser.primaryEmailAddress?.emailAddress);
 
         if(!isAdmin){
-            return res.status(403).json({message: "You must be admin to acess"});
+            return res.status(403).json({message: "You must be admin to access"});
         }
         next();
     } catch (error) {

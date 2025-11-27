@@ -9,6 +9,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
     clerkId: {
         type: String,
         required: true,
@@ -24,7 +29,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Song",
         default: [],
-        required: false
+        required: true
     }]
 }, { timestamps: true });
 
