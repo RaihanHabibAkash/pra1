@@ -2,7 +2,8 @@ import { Song } from "../models/song.model.js";
 import { Album } from "../models/album.model.js";
 import { deleteInCloudinary, uploadToCloudinary } from "../middlewere/uploadToCloudinary.js";
 import { User } from "../models/user.model.js";
-
+import { clerkClient } from "@clerk/express";
+// Done
 export const getAllSongs = async (req, res) => {
     try {
         // Newest to Oldest
@@ -91,11 +92,11 @@ export const deleteSong = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error });
     }
 }
-
+// Done
 export const checkAdmin = (req, res) => {
     res.status(200).json({ admin: true });
 }
-
+// Done
 export const getAllUsers = async (req, res) => {
     try {
         const { userId } = req.auth();
@@ -109,7 +110,7 @@ export const getAllUsers = async (req, res) => {
         console.log("Error in getAllUsers", error);
         res.status(500).json({ message: "Internal server error"})
     }
-}
+} 
 
 export const deleteUser = async (req, res) => {
     try {
@@ -124,7 +125,8 @@ export const deleteUser = async (req, res) => {
                 
         await Promise.all([
             Song.updateMany({}, { $pull: { likedBy: user._id, playedBy: user._id } }),
-            User.findByIdAndDelete(user._id)
+            User.findByIdAndDelete(user._id),
+            clerkClient.users.deleteUser(userId)
         ]);
         
         res.status(200).json({ message: "User delated sucessfully" });

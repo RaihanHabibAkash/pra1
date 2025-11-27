@@ -3,7 +3,8 @@ import { User } from "../models/user.model.js";
 
 export const authCallback = async (req, res) => {
     try {
-        const currentUser = await clerkClient.users.getUser(req.auth.userId);
+        const { userId } = req.auth();
+        const currentUser = await clerkClient.users.getUser(userId);
 
         const id = currentUser.id;
         const firstName = currentUser.firstName;
@@ -16,7 +17,7 @@ export const authCallback = async (req, res) => {
         }
 
         // Checking if user exits, than LogIN
-        const user = await User.findOne({ clerkId: id });
+        let user = await User.findOne({ clerkId: id });
 
         // If user does't exits, SignUP
         if(!user){
