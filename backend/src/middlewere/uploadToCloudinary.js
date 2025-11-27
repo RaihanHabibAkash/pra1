@@ -5,9 +5,9 @@ export const uploadToCloudinary = async (file, fileType) => {
     try {
         let forResourceType = "";
         let forFolder = "";
+
         const userId = req.auth;
         const user = await User.findById(userId);
-
         if(!user) {
            return console.log("User not found in uploadToCloudinary");
         }
