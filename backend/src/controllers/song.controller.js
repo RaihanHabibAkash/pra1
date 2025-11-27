@@ -1,20 +1,6 @@
 import { Song } from "../models/song.model.js";
 import { User } from "../models/user.model.js";
 
-export const getAllSongs = async (req, res) => {
-    try {
-        // Newest to Oldest
-        const songs = await Song.find().sort({ createdAt: -1 });
-        if(songs.length == 0){
-            return res.status(400).json({ message: "Songs Not Found" });
-        }
-        res.status(200).json({ songs });
-    } catch (error) {
-        console.log("Error in getAllSongs", error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-};
-
 export const getFeaturedSongs = async (req, res) => {
     try {
         const songs = await Song.aggregate([

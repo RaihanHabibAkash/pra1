@@ -10,8 +10,8 @@ export const protectRoute = (req, res, next) => {
 
 export const requireAdmin = async (req, res, next) => {
     try {
-        const id = req.auth.userId;
-        const user = await User.findOne({ clerkId: id });
+        const { userId } = req.auth()
+        const user = await User.findOne({ clerkId: userId });
         if(!user) {
             return res.status(400).json({ message: "You must log In" })
         }
