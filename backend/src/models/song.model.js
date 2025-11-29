@@ -77,11 +77,6 @@ const songSchema = new mongoose.Schema({
         ],
         required: true
     },
-    albumId: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Album",
-        required: false
-    }],
     likes: {
         type: Number,
         default: 0,

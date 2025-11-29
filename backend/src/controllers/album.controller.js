@@ -1,14 +1,16 @@
 import { deleteInCloudinary, uploadToCloudinary } from "../middlewere/uploadToCloudinary.js";
 import { Album } from "../models/album.model.js";
 import { Song } from "../models/song.model.js";
+import { User } from "../models/user.model.js";
 
 export const getAlbums = async (req, res) => {
     try {
-        const albums = await Album.find();
-        if(!albums){
-            return res.status(404).json({ message: "Albums not found" });
+        const { userId } = req.auth();
+        const user = await User.findOne({ clerkId: userId }).populate("albums");
+        if(!user) {
+            return res.status(400).json({ message: "User not found in getAlbums" })
         }
-        res.status(200).json({ albums });
+        res.status(200).json({ albums: user.albums });
     } catch (error) {
         console.log("Error in getAlbums", error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -37,6 +39,14 @@ export const createAlbum = async (req, res) => {
             return res.status(400).json({ message: "Title, Artist, Release-year are required" });
         }
 
+        const { userId } = req.auth();
+        const owner = await User.findOne({ clerkId: userId });
+
+        if(!owner) {
+            return res.status(400).json({ message: "User not found in create Album" })
+        }
+
+
         if(!req.files || !req.files.imageFile){
             return res.status(400).json({ message: "Submit Image file"})
         }
@@ -47,15 +57,21 @@ export const createAlbum = async (req, res) => {
             return res.status(400).json({ message: "Error in create Album up" });
         }
 
-        const album = new Album({
+        const album = await Album.create({
             title,
             artist,
+            owner,
             imageUrl: imageRef.url,
             imagePublicId: imageRef.publicId,
             releaseYear
         });
-        await album.save();
-        res.status(201).json({ message: "Album Created successfully", createdAlbum: album });
+
+        owner.albums.push(album._id);
+        await owner.save();
+        res.status(201).json({ 
+            message: "Album Created successfully", 
+            createdAlbum: album 
+        });
     } catch (error) {
         console.log("Error while Creating Album", error);
         res.status(500).json({ message: "Internal Server Error", error });
@@ -64,9 +80,13 @@ export const createAlbum = async (req, res) => {
 
 export const deleteAlbum = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { userId } = req.auth();
+        const user = await User.findOne({ clerkId: userId });
+        if(!user) {
+            return res.status(400).json({ message: "User not found in deleteAlbums" })
+        }
 
-        // Finding Album in MongoDB
+        const { id } = req.params;
         const album = await Album.findById(id);
         if(!album){
             return res.status(404).json({ message: "Album not found" });
@@ -74,11 +94,21 @@ export const deleteAlbum = async (req, res) => {
 
         // Delete Album Image in Cloudinary
         if(album.imagePublicId){
-            await deleteInCloudinary(album.imagePublicId, "image");
+            try {
+                await deleteInCloudinary(album.imagePublicId, "image");
+            } catch (error) {
+                console.log("Failed to delete album image in Cloudinary", error);
+            }    
         }
-        // Delte Album in MongoDB
-        await Album.findByIdAndDelete(id);
-        res.status(200).json({ message: "Album Delted sucessfully", deletedAlbum: album });
+
+        user.albums.pull(album._id);
+        await user.save();
+
+        await Album.findByIdAndDelete(id); 
+        res.status(200).json({ 
+            message: "Album Delted sucessfully", 
+            deletedAlbum: album 
+        });
     } catch (error) {
         console.log("Error while Deleting Album", error);
         res.status(500).json({ message: "Internal Server Error", error });
@@ -87,6 +117,12 @@ export const deleteAlbum = async (req, res) => {
 
 export const addToAlbum = async (req, res) => {
     try {
+        const { userId } = req.auth();
+        const user = await User.findOne({ clerkId: userId });
+        if(!user) {
+            return res.status(400).json({ message: "User not found in addToAlbum" })
+        }
+
         const { songId, albumId } = req.params;
         if(!songId || !albumId){
             return res.status(400).json({ message: "Params not found in addToAlbum"})
@@ -98,8 +134,6 @@ export const addToAlbum = async (req, res) => {
         }
 
         let album = await Album.findById(albumId);
-
-        // Create album
         if(!album){
            return res.status(404).json({ message: "Album not found" });
         }
@@ -110,9 +144,9 @@ export const addToAlbum = async (req, res) => {
             await album.save();
         }
 
-        if(!song.albumId.some(s => s.equals(album._id))){
-            song.albumId.push(album._id);
-            await song.save();
+        if(!user.albums.some(a => a.equals(album._id))){
+            user.albums.push(album._id);
+            await user.save();
         }
 
         res.status(200).json({ message: `Add to ${album.title}  Album` });
@@ -124,6 +158,12 @@ export const addToAlbum = async (req, res) => {
 
 export const removeFromAlbum = async (req, res) => {
     try {
+        const { userId } = req.auth();
+        const user = await User.findOne({ clerkId: userId });
+        if(!user) {
+            return res.status(400).json({ message: "User not found in removeFromAlbum" })
+        }
+
         const { albumId, songId } = req.params;
         if(!songId || !albumId){
             return res.status(400).json({ message: "Params not found in removeFromAlbum" });
@@ -139,16 +179,14 @@ export const removeFromAlbum = async (req, res) => {
             return res.status(404).json({ message: "Album not found in removeAlbum" });
         }
         
-        // Deleting song from album
         if(album.songs.some(s => s.equals(song._id))){
             album.songs.pull(song._id);
             await album.save();
         }
 
-        // Deleting albumId from song
-        if(song.albumId.some(a => a.equals(song._id))){
-            song.albumId.pull(album._id);
-            await song.save();
+        if(user.albums.some(a => a.equals(album._id))){
+            user.albums.pull(album._id);
+            await user.save();
         }
 
         res.status(200).json({ message: `${song.title} deleted sucesssfully from ${album.title}` });

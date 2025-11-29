@@ -7,7 +7,8 @@ const userSchema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
     },
     email: {
         type: String,
@@ -23,11 +24,17 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Song",
         default: [],
-        required: false
+        required: true
     }],
     recentlyPlayed: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Song",
+        default: [],
+        required: true
+    }],
+    albums: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Album",
         default: [],
         required: true
     }]

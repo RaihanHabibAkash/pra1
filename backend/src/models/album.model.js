@@ -21,11 +21,16 @@ const albumSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
     songs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Song",
         required: false
     }]
-}, {timestamps: true});
+}, { timestamps: true });
 
 export const Album = mongoose.model("Album", albumSchema);
