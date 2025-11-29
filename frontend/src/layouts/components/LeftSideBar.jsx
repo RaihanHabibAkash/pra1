@@ -6,6 +6,7 @@ import { HomeIcon, LibraryIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const LeftSideBar = () => {
+  // Import Albums using musicStore
   return (
     <div className="h-full flex flex-col gap-2">
       {/* Nav Menu */}
