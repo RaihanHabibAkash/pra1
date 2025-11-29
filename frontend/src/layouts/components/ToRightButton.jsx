@@ -16,7 +16,7 @@ const Sidebar = () => {
       {!open ? (
         // Condition 1 Start
         <ArrowRight onClick={ () => setOpen(true) }
-          className="size-7 text-green-500 bg-zinc-700 rounded-md animate-bounce cursor-pointer fixed top-1/2 left-5"/>
+          className="size-7 text-green-500 bg-zinc-700 rounded-md animate-bounce cursor-pointer fixed top-1/2 left-0"/>
         // Condition 1 Ends
       ) : (
         // Condition 2 Starts
@@ -60,7 +60,7 @@ const Sidebar = () => {
                 <PlayListSkeleton />
               </div>
               <ArrowLeft onClick={ () => setOpen(false) }  
-                className="size-7 text-green-500 bg-zinc-700 rounded-md animate-bounce cursor-pointer z-50 fixed top-1/2 right-5" />
+                className="size-7 text-green-500 bg-zinc-700 rounded-md animate-bounce cursor-pointer z-50 fixed top-1/2 right-0" />
             </ScrollArea>
           </div>
           {/* Library Section End */}
