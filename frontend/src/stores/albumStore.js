@@ -10,7 +10,7 @@ export const albumStore =  create((set) => {
             set({ isLoading: true, error: null });
             try {
                 const response = await axiosInstance.get("/albums");
-                set({ albums: response.data });
+                set({ albums: response.data.albums || [] });
             } catch (error) {
                 set({ error: error.response.data.message });
             } finally {

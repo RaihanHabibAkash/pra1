@@ -5,7 +5,8 @@ import { User } from "../models/user.model.js";
 
 export const getAlbums = async (req, res) => {
     try {
-        const { userId } = req.auth();
+        // const { userId } = req.auth();
+        const userId = "user_368zGvjtbDr0b2tHDofDhTdNzOL"; // For Postman
         const user = await User.findOne({ clerkId: userId }).populate("albums");
         if(!user) {
             return res.status(400).json({ message: "User not found in getAlbums" })
@@ -32,14 +33,16 @@ export const getAlbumById = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
+// Done
 export const createAlbum = async (req, res) => {
     try {
-        const { title, artist, releaseYear } = req.body;
-        if(!title || !artist || !releaseYear){
-            return res.status(400).json({ message: "Title, Artist, Release-year are required" });
+        const { title, releaseYear } = req.body;
+        if(!title || !releaseYear){
+            return res.status(400).json({ message: "Title, Release-year are required" });
         }
 
-        const { userId } = req.auth();
+        // const { userId } = req.auth();
+        const userId = "user_368zGvjtbDr0b2tHDofDhTdNzOL"; // For Postman
         const owner = await User.findOne({ clerkId: userId });
 
         if(!owner) {
@@ -53,13 +56,12 @@ export const createAlbum = async (req, res) => {
         const imageFile = req.files.imageFile;
 
         const imageRef = await uploadToCloudinary(imageFile, "image");
-        if(imageRef){
+        if(!imageRef){
             return res.status(400).json({ message: "Error in create Album up" });
         }
 
         const album = await Album.create({
             title,
-            artist,
             owner,
             imageUrl: imageRef.url,
             imagePublicId: imageRef.publicId,
