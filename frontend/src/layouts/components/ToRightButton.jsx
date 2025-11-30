@@ -33,22 +33,22 @@ const Sidebar = () => {
               <Link to={"/"} className={cn(
                   buttonVariants({
                     variant: "ghost",
-                    className: "w-full justify-start text-white hover:bg-zinc-800",
+                    className: "w-full justify-center text-white bg-zinc-700",
                   })
                 )}>
-                <HomeIcon className="size-6 mr-1" />
-                <span className="hidden md:inline">Home</span>
+                <HomeIcon className="size-6" />
+                <span className="size-10 mb-auto">Home</span>
               </Link>
 
               <Link to={"/albums"} className={cn(
                   buttonVariants({
                     variant: "ghost",
-                    className: "w-full justify-start text-white hover:bg-zinc-800",
+                    className: "w-full justify-center text-white bg-zinc-700",
                   })
                 )}
               >
-                <LibraryIcon className="size-6 mr-1" />
-                <span className="hidden md:inline">Library</span>
+                <LibraryIcon className="size-6" />
+                <span className="size-10 mb-auto">Library</span>
               </Link>
             </div>
           </div>
@@ -58,7 +58,7 @@ const Sidebar = () => {
           <div className="flex flex-col flex-1 rounded-lg bg-zinc-800 p-4">
             <div className="flex mb-4 px-2 text-white">
               <LibraryIcon className="size-6 mr-1" />
-              <span className="hidden md:inline">Playlists</span>
+              <span className="size-10">Playlists</span>
             </div>
 
             <ScrollArea className="flex-1">
@@ -68,10 +68,10 @@ const Sidebar = () => {
                 ) : (
                   albums.map(album => (
                     <Link to={`/albums/${album._id}`} key={album._id} 
-                    className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer">
-                      <img src={album.imageUrl} alt={album.title} className="size-12 rounded-md flex-shrink-0 object-cover"/>
+                    className="p-2 bg-zinc-900 rounded-md flex items-center gap-3 cursor-pointer">
+                      <img src={album.imageUrl} alt={album.title} className="size-18 rounded-md flex-shrink-0 object-cover"/>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium truncate group-hover:text-green-500">
+                        <p className="font-medium truncate text-green-500">
                           {album.title}
                         </p>
                       </div>
