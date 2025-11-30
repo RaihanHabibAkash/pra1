@@ -8,9 +8,9 @@ const router = Router();
 
 router.get("/" , getAlbums);
 router.get("/:albumId", getAlbumById);
-router.post("/albums", createAlbum);
-router.delete("/albums/:id", deleteAlbum);
-router.post("/albums/:albumId/add/:songId", addToAlbum);
-router.delete("/ablums/:albumId/remove/:songId", removeFromAlbum);
+router.post("/album", createAlbum);
+router.delete("/album/:id", deleteAlbum);
+router.post("/all-albums/:albumId/add/:songId", addToAlbum);
+router.delete("/all-ablums/:albumId/remove/:songId", removeFromAlbum);
 
 export default router;
