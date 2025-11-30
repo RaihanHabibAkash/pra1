@@ -1,12 +1,18 @@
 import PlayListSkeleton from "@/components/skeletons/PlayListSkeleton";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { albumStore } from "@/stores/albumStore";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { ArrowLeft, ArrowRight, HomeIcon, LibraryIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+  const { isLoading, albums, fetchAlbums } = albumStore();
+  useEffect(() => {
+    fetchAlbums();
+  },[fetchAlbums]);
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -57,7 +63,22 @@ const Sidebar = () => {
 
             <ScrollArea className="flex-1">
               <div className="space-y-2">
-                <PlayListSkeleton />
+                {isLoading ? (
+                  <PlayListSkeleton />
+                ) : (
+                  albums.map(album => (
+                    <Link to={`/albums/${album._id}`} key={album._id} 
+                    className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer">
+                      <img src={album.imageUrl} alt={album.title} className="size-12 rounded-md flex-shrink-0 object-cover"/>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate group-hover:text-green-500">
+                          {album.title}
+                        </p>
+                      </div>
+                    </Link>
+                  ))
+                )}
+                
               </div>
               <ArrowLeft onClick={ () => setOpen(false) }  
                 className="size-7 text-green-500 bg-zinc-700 rounded-md animate-bounce cursor-pointer z-50 fixed top-1/2 right-0" />
