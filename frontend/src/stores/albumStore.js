@@ -6,6 +6,8 @@ export const albumStore =  create((set) => {
         albums: [],
         isLoading: false,
         error: null,
+        currentAlbum: null,
+
         fetchAlbums: async () => {
             set({ isLoading: true, error: null });
             try {
@@ -16,6 +18,19 @@ export const albumStore =  create((set) => {
             } finally {
                 set({ isLoading: false })
             }
+        },
+
+        fetchAlbumById: async (albumId) => {
+            set({ isLoading: true, error: null });
+            try {
+                const response = await axiosInstance.get(`/albums/${albumId}`);
+                set({ currentAlbum: response.data })
+            } catch (error) {
+                set({ error: error.response.data.message });
+            } finally {
+                set({ isLoading: false });
+            }
         }
+
     }
 })
