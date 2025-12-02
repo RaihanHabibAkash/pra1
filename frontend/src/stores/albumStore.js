@@ -24,7 +24,7 @@ export const albumStore =  create((set) => {
             set({ isLoading: true, error: null });
             try {
                 const response = await axiosInstance.get(`/albums/${albumId}`);
-                set({ currentAlbum: response.data })
+                set({ currentAlbum: response.data.album })
             } catch (error) {
                 set({ error: error.response.data.message });
             } finally {
