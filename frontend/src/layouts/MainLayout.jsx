@@ -20,20 +20,17 @@ const MainLayout = () => {
 
   return (
     <div className="h-screen text-white bg-black flex flex-col">
-        <ResizablePanelGroup direction="horizontal" className="flex-1 flex h-full overflow-hidden p-2">
+        <ResizablePanelGroup direction="horizontal" className="flex-1 flex h-full overflow-hidden">
             {/* Left Side */}
 
             { isMobile ? (
                 <>
                     <ToRightButton />
-                    <ResizablePanel  defaultSize={0} minSize={0} maxSize={100}>
-                        <LeftSideBar />
-                    </ResizablePanel>
                 </>
                 
             ) : (
                 <>
-                    <ResizablePanel  defaultSize={25} minSize={0} maxSize={35}>
+                    <ResizablePanel id="left" order={1}  defaultSize={25} minSize={0} maxSize={35}>
                         <LeftSideBar />
                     </ResizablePanel>
 
@@ -41,10 +38,8 @@ const MainLayout = () => {
                 </>
                 
             ) }
-            
-
                 {/* Right Side */}
-            <ResizablePanel defaultSize={isMobile ? 100 : 75}>
+            <ResizablePanel id="right" order={2} defaultSize={isMobile ? 100 : 75}>
                 <Outlet />
             </ResizablePanel>
         </ResizablePanelGroup>

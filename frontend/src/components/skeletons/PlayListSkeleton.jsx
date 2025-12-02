@@ -1,6 +1,6 @@
 
 const PlayListSkeleton = () => {
-  return Array.from({ length: 8 }).map((_, i) => (
+  return Array.from({ length: 20 }).map((_, i) => (
         <div key={i} className="p-2 rounded-md flex items-center gap-4">
             <div className="size-12 bg-zinc-900 rounded-md shrink-0 animate-pulse" />
 
