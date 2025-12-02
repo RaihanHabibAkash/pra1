@@ -22,22 +22,20 @@ const AlbumPage = () => {
     const [ colors, setColors ] = useState({ 
                                     r1: 0, g1: 0, b1: 0,
                                     r2: 0, g2: 0, b2: 0,
-                                    r3: 0, g3: 0, b3:0 
                                   }); 
     useEffect(() => {
     const rand = () => Math.floor(Math.random() * 256);
     setColors({
       r1: rand(), g1: rand(), b1: rand(),
-      r2: rand(), g2: rand(), b2: rand(),
-      r3: rand(), g3: rand(), b3: rand()
+      r2: rand(), g2: rand(), b2: rand()
     });
   }, []);
   const gradientStyle = {
     background: `linear-gradient(
       to bottom,
-      rgb(${colors.r2}, ${colors.g2}, ${colors.b2}) 10%,
-      rgb(${colors.r3}, ${colors.g3}, ${colors.b3}) 30%,
-      rgb(0,0,0) 100%
+      rgb(${colors.r1}, ${colors.g1}, ${colors.b1}) 10%,
+      rgb(${colors.r2}, ${colors.g2}, ${colors.b2}) 30%,
+      rgb(0,0,0) 90%
     )`
   };
 
