@@ -49,6 +49,8 @@ const AlbumPage = () => {
     )`
   };
 
+  // Mobile Part
+
 
   return (
     <div className="h-full">
