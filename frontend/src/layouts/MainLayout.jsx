@@ -16,7 +16,7 @@ const MainLayout = () => {
 
         window.addEventListener("resize", checkSize);
         return () => window.removeEventListener("resize", checkSize);
-    }, [])
+    }, []);
 
   return (
     <div className="h-screen text-white bg-black flex flex-col">

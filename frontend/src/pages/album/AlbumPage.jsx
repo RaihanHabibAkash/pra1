@@ -15,6 +15,19 @@ const formatTime = (seconds) => {
 
 
 const AlbumPage = () => {
+    const [ isMobile, setIsMobile ] = useState(false);
+
+    useEffect(() => {
+        const checkSize = () => {
+            window.innerWidth < 768 ? setIsMobile(true) : setIsMobile(false)
+        }
+
+        checkSize();
+
+        window.addEventListener("resize", checkSize);
+        return () => window.removeEventListener("resize", checkSize);
+    }, []);
+
     const { albumId } = useParams();
     const { fetchAlbumById, currentAlbum } = albumStore();
 
