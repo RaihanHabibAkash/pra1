@@ -17,7 +17,7 @@ export const getAlbums = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const getAlbumById = async (req, res) => {
     try {
         const { albumId } = req.params;
@@ -119,7 +119,9 @@ export const deleteAlbum = async (req, res) => {
 
 export const addToAlbum = async (req, res) => {
     try {
-        const { userId } = req.auth();
+        // For Postman
+        // const { userId } = req.auth();
+        const userId = "user_368zGvjtbDr0b2tHDofDhTdNzOL";
         const user = await User.findOne({ clerkId: userId });
         if(!user) {
             return res.status(400).json({ message: "User not found in addToAlbum" })
