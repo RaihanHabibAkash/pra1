@@ -25,7 +25,7 @@ const AuthProvider = ({ children }) => {
 
         // Checks for Admin
         if(token) {
-          await checkAdmin();
+          await checkAdmin()
         }
 
         updateApiToken(token);
