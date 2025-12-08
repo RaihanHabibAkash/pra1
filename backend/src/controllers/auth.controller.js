@@ -16,7 +16,7 @@ export const authCallback = async (req, res) => {
           return res.status(400).json({ message: "Add all required fields in authCallback" })
         }
 
-        // Checking if user exits, than LogIN
+        // Checking if user exits
         let user = await User.findOne({ clerkId: id });
 
         // If user does't exits, SignUP
