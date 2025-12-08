@@ -6,7 +6,7 @@ export const authStore = create(set => {
         isLoading: false,
         error: null,
         isAdmin: false,
-        chechAdmin: async () => {
+        checkAdmin: async () => {
             set({ isLoading: true, error: null });
 
             try {
