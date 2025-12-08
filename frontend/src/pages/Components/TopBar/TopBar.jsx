@@ -1,12 +1,14 @@
-import { SignedIn, SignedOut, SignOutButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, SignOutButton, UserButton } from '@clerk/clerk-react';
 import { LayoutDashboardIcon } from 'lucide-react';
 import React from 'react'
 import { Link } from 'react-router-dom';
 import SignInAuthButton from './components/SignInAuthButton.jsx';
+import { authStore } from '@/stores/authStore.js';
+import { cn } from '@/lib/utils.js';
+import { buttonVariants } from '@/components/ui/button.jsx';
 
 const TopBar = () => {
-    const isAdmin = true;
-
+  const { isAdmin } = authStore(); 
 
   return (
     <div className="w-full h-10 bg-zinc-800/90 flex justify-between 
@@ -20,25 +22,27 @@ const TopBar = () => {
           </a>
             <p className="text-base">Music Player</p>
         </div>
-
+        
+        <div className="flex items-center gap-4">
          {isAdmin && (
-        <Link to={"/admin"}>
-            <LayoutDashboardIcon className="size-7" />
+        <Link to={"/admin"} className={cn(
+          buttonVariants({ variant: "outline"}) 
+          )}>
+            <LayoutDashboardIcon className="size-7 md:mr-2" />
+            <span className="hidden md:inline">Admin Dashboard</span>
         </Link>
         )}
         
-      </div>
-
-      <div className="mr-4">
+        {/* Will be shown if the user if logged out */}
         <SignedOut>
             <SignInAuthButton />
         </SignedOut>
 
-        <SignedIn>
-            <SignOutButton />
-        </SignedIn>
+        {/* Will be shown if user if Logged in */}
+        <UserButton />
+        </div>
+
       </div>
-      
     </div>
   )
 }
