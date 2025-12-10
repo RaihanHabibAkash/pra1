@@ -24,7 +24,7 @@ export const authStore = create(set => {
                 isLoading: false, 
                 error: null 
             });
-        }
+        },
 
     }
 })

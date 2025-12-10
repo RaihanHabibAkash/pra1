@@ -1,4 +1,4 @@
-import { SignedIn, SignedOut, SignOutButton, UserButton } from '@clerk/clerk-react';
+import { SignedOut, UserButton } from '@clerk/clerk-react';
 import { LayoutDashboardIcon } from 'lucide-react';
 import React from 'react'
 import { Link } from 'react-router-dom';
@@ -11,28 +11,27 @@ const TopBar = () => {
   const { isAdmin } = authStore(); 
 
   return (
-    <div className="w-full h-10 bg-zinc-800/90 flex justify-between 
-      items-center backdrop-blur-lg sticky top-0 p-4 z-10">
+    <div className="w-full h-10 bg-zinc-800/90 flex items-center backdrop-blur-lg sticky top-0 p-4 z-10 rounded-lg justify-around">
       
-      <div className="flex items-center gap-8">
-
         <div className="flex items-center gap-2">
           <a href="https://github.com/RaihanHabibAkash" target="_blank">
             <img src="../public/photos/logo.png" alt="Ash Music Player Logo" className="h-8" />
           </a>
-            <p className="text-base">Music Player</p>
+            <p className="text-base hidden md:inline">Music Player</p>
         </div>
         
         <div className="flex items-center gap-4">
          {isAdmin && (
         <Link to={"/admin"} className={cn(
-          buttonVariants({ variant: "outline"}) 
+          buttonVariants({ variant: "outline"})
           )}>
             <LayoutDashboardIcon className="size-7 md:mr-2" />
             <span className="hidden md:inline">Admin Dashboard</span>
         </Link>
         )}
-        
+        </div>
+
+        <div className="flex items-center">
         {/* Will be shown if the user if logged out */}
         <SignedOut>
             <SignInAuthButton />
@@ -42,7 +41,6 @@ const TopBar = () => {
         <UserButton />
         </div>
 
-      </div>
     </div>
   )
 }
