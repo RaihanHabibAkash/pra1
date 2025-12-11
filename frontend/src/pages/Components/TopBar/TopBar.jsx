@@ -17,7 +17,7 @@ const TopBar = () => {
           <a href="https://github.com/RaihanHabibAkash" target="_blank">
             <img src="../public/photos/logo.png" alt="Ash Music Player Logo" className="h-8" />
           </a>
-            <p className="text-base hidden md:inline">Music Player</p>
+            <p className="text-bold hidden sm:inline">Music Player</p>
         </div>
         
         <div className="flex items-center gap-4">
