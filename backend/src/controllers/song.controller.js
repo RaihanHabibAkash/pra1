@@ -1,6 +1,7 @@
 import { Song } from "../models/song.model.js";
 import { User } from "../models/user.model.js";
 
+// const mongoUserId = mongoUser._id;
 export const getFeaturedSongs = async (req, res) => {
     try {
         const songs = await Song.aggregate([
