@@ -3,7 +3,7 @@ import { User } from "../models/user.model.js";
 
 export const toggleLike = async (req, res) => {
     try {
-        const userId = req.auth?.userId;
+        const { userId } = req.auth();
         const { id } = req.params;
         if(!userId || !id){
             return res.status(400).json({ message: "Did not found song or user"});
@@ -47,15 +47,15 @@ export const toggleLike = async (req, res) => {
 
 export const addToRecentlyPlayed = async (req, res) => {
   try {
-    const currentUserId = req.auth?.userId;
+    const { userId } = req.auth();
     const { songId } = req.params;
 
-    if (!currentUserId || !songId) {
+    if (!songId) {
       return res.status(400).json({ message: "Invalid request" });
     }
 
-    const user = await User.findOne({ clerkId: currentUserId });
-    const song = await Song.findById(songId);
+    const user = await User.findOne({ clerkId: userId });
+    const song = await Song.findById({songId});
 
     if (!user || !song) {
       return res.status(404).json({ message: "User or song not found" });

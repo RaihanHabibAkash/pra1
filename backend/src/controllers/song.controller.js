@@ -1,7 +1,7 @@
 import { Song } from "../models/song.model.js";
 import { User } from "../models/user.model.js";
 
-// const mongoUserId = mongoUser._id;
+// Done
 export const getFeaturedSongs = async (req, res) => {
     try {
         const songs = await Song.aggregate([
@@ -29,13 +29,17 @@ export const getFeaturedSongs = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const getMadeForYouSongs = async (req, res) => {
     try {
         let songs = [];
 
         const { userId } = req.auth();
         const userClerk = await User.findOne({ clerkId: userId });
+        
+        if (!userClerk) {
+            return res.status(404).json({ message: "User not found" });
+        }
         const user = userClerk._id;
         if(!user){
             return res.status(400).json({ message: "Unauthorized" });
@@ -148,6 +152,9 @@ export const matchedGenre = async (req, res) => {
         
         const { userId } = req.auth();
         const userClerk = await User.findOne({ clerkId: userId });
+        if(!userClerk) {
+            return res.status(404).json({ message: "User not found in matchedGenre" })
+        }
         const user = userClerk._id;
         if(!user){
             return res.status(400).json({ message: "User not found in matchedGenre" });
@@ -214,6 +221,9 @@ export const matchedLanguage = async (req, res) => {
 
         const { userId } = req.auth();
         const userClerk = await User.findOne({ clerkId: userId });
+        if(!userClerk) {
+            return res.status(404).json({ message: "User not found in matchedLanguage" })
+        }
         const user = userClerk._id;
         if(!userId || !user){
             return res.status(400).json({ message: "User not found in matchedLanguage" });
@@ -286,11 +296,9 @@ export const getLikedSongs = async (req, res) => {
         const user = userClerk._id;
 
         const songs = await Song.find({ likedBy: user }).sort({ createdAt: -1 });
-        if(songs.length === 0){
-            return res.status(404).json({ message: "No Songs found" });
-        }
 
-        res.status(200).json({ songs });
+        const forSongs = songs || null;
+        res.status(200).json({ forSongs });
     } catch (error) {
         console.error("Error in getMadeForYouSongs:", error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -305,16 +313,13 @@ export const getRecentlyPlayedSongs = async (req, res) => {
     }
 
     const userClerk = await User.findOne({ clerkId: userId });
-    if (!currentUser) {
+    if (!userClerk) {
       return res.status(404).json({ message: "User not found in getRecentlyPlayed" });
     }
 
     const user = userClerk._id;
 
     const playedSongs = await Song.find({ playedBy: user });
-    if(playedSongs.length <= 0) {
-        return res.status(404).json({ message: "Songs not found ind getRecentlyPlayedSongs"})
-    }
 
     const songs = playedSongs.filter((song, index, arr) => {
         index === arr.findIndex(s => s._id.toString() === song._id.toString())
@@ -323,7 +328,9 @@ export const getRecentlyPlayedSongs = async (req, res) => {
     if(songs.length > 20){
         songs.slice(0, 20);
     }
-    res.status(200).json({ songs });
+
+    const forSongs = songs || null;
+    res.status(200).json({ forSongs });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
