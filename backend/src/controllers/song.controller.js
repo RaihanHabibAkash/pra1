@@ -31,7 +31,7 @@ export const getFeaturedSongs = async (req, res) => {
 
 export const getMadeForYouSongs = async (req, res) => {
     try {
-        const userId = req.auth?.userId;
+        const { userId } = req.auth();
         // Gives the all fields of the liked song
         const currentUserLikes = await User.findOne({ clerkId: userId }).populate("likedSongs");
         if(!currentUserLikes){
@@ -140,9 +140,9 @@ export const matchedGenre = async (req, res) => {
     try {
         let songs = [];
         
-        const userId = req.auth?.userId;
+        const { userId } = req.auth();
         const user = await User.findOne({ clerkId: userId }).populate("likedSongs");
-        if(!userId || !user){
+        if(!user){
             return res.status(400).json({ message: "User not found in matchedGenre" });
         }
 
@@ -162,11 +162,11 @@ export const matchedGenre = async (req, res) => {
             if(viewedSongs.length > 0){
                 const playedSongsIds = viewedSongs.map(song => song._id);
                 const playedGenre = [...new Set(viewedSongs.map(song => song.genre))];
-                    let moreSongs = await Song.find({
+            }
+            let moreSongs = await Song.find({
                         genre: { $in: playedGenre },
                         _id: { $nin: playedSongsIds }            
                 }).sort({ createdAt: -1 }).limit(20);
-            }
             songs = [...songs, ...moreSongs];
             songs = songs.filter((song, index, arr) =>
                 index === arr.findIndex(s => s._id.toString() === song._id.toString()));
@@ -200,7 +200,7 @@ export const matchedLanguage = async (req, res) => {
     try {
         let songs = [];
 
-        const userId = req.auth?.userId;
+        const { userId } = req.auth();
         const user = await User.findOne({ clerkId: userId }).populate("likedSongs");
         if(!userId || !user){
             return res.status(400).json({ message: "User not found in matchedLanguage" });
@@ -259,13 +259,13 @@ export const matchedLanguage = async (req, res) => {
 
 export const getLikedSongs = async (req, res) => {
     try {
-        const userId = req.auth?.userId;
+        const { userId } = req.auth();
         const currentUser = await User.findOne({ clerkId: userId });
         if(!userId || !currentUser){
             return res.status(400).json({ message: "Error in getLiked Somgs" });
         }
 
-        const songs = await Song.find({ likedBy: userId })
+        const songs = await Song.find({ likedBy: currentUser._id })
         .populate("likedBy").sort({ createdAt: -1 });
         if(songs.length === 0){
             return res.status(404).json({ message: "No Songs found" });
@@ -280,7 +280,7 @@ export const getLikedSongs = async (req, res) => {
 
 export const getRecentlyPlayedSongs = async (req, res) => {
   try {
-    const userId = req.auth?.userId;
+    const { userId } = req.auth();
     if (!userId) {
       return res.status(400).json({ message: "User not authenticated" });
     }

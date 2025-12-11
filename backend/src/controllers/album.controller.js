@@ -119,9 +119,7 @@ export const deleteAlbum = async (req, res) => {
 
 export const addToAlbum = async (req, res) => {
     try {
-        // For Postman
-        // const { userId } = req.auth();
-        const userId = "user_368zGvjtbDr0b2tHDofDhTdNzOL";
+        const { userId } = req.auth();
         const user = await User.findOne({ clerkId: userId });
         if(!user) {
             return res.status(400).json({ message: "User not found in addToAlbum" })

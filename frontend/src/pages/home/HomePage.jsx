@@ -3,12 +3,6 @@ import TopBar from '../Components/TopBar/TopBar.jsx';
 import { ScrollArea } from '@/components/ui/scroll-area.jsx';
 import { musicStore } from '@/stores/musicStore.js';
 import FeaturedSection from './components/FeaturedSection.jsx';
-import MadeForYouSection from './components/MadeForYouSection.jsx';
-import TrendingSection from './components/TrendingSection.jsx';
-import FavGenreSection from './components/FavGenreSection.jsx';
-import FavLanguageSection from './components/FavLanguageSection.jsx';
-import LikedSongsSection from './components/LikedSongsSection.jsx';
-import RecentlyPlayedSection from './components/RecentlyPlayedSection.jsx';
 
 const HomePage = () => {
   const { 
@@ -20,6 +14,7 @@ const HomePage = () => {
     fetchLikedSongs,
     fetchRecentlyPlayedSongs
   } = musicStore();
+  console.log(fetchFavGenreSongs);
 
   useEffect(() => {
     fetchFeaturedSongs();
@@ -45,12 +40,6 @@ const HomePage = () => {
       <ScrollArea className="h-[calc(100vh-200px)]">
         <div className="p-4 sm:p-6 flex flex-col">
           <FeaturedSection />
-          <MadeForYouSection />
-          <TrendingSection />
-          <FavGenreSection />
-          <FavLanguageSection />
-          <LikedSongsSection />
-          <RecentlyPlayedSection />
 
         </div>
       </ScrollArea>
