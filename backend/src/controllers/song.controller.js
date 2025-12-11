@@ -32,20 +32,22 @@ export const getFeaturedSongs = async (req, res) => {
 
 export const getMadeForYouSongs = async (req, res) => {
     try {
-        const { userId } = req.auth();
-        // Gives the all fields of the liked song
-        const currentUserLikes = await User.findOne({ clerkId: userId }).populate("likedSongs");
-        if(!currentUserLikes){
-            return res.status(400).json({ message: "Unauthorized" });
-        }
         let songs = [];
 
-        if(currentUserLikes.likedSongs.length > 0){
-            const likedSongIds = currentUserLikes.likedSongs.map(song => song._id);
-            // User liked songs genre playlist
-            const likedGenres = [...new Set(currentUserLikes.likedSongs.map(song => song.genre))];
-            const likedArtist = [...new Set(currentUserLikes.likedSongs.map(song => song.artist))];
-            const likedLanguage = [...new Set(currentUserLikes.likedSongs.map(song => song.language))];
+        const { userId } = req.auth();
+        const userClerk = await User.findOne({ clerkId: userId });
+        const user = userClerk._id;
+        if(!user){
+            return res.status(400).json({ message: "Unauthorized" });
+        }
+        const likedSongs = await Song.find({ likedBy: user });
+
+        if(likedSongs > 0){
+            const likedSongIds = likedSongs.map(song => song._id);
+            // User liked songs playlist
+            const likedGenres = [...new Set(likedSongs.map(song => song.genre))];
+            const likedArtist = [...new Set(likedSongs.map(song => song.artist))];
+            const likedLanguage = [...new Set(likedSongs.map(song => song.language))];
 
             songs = await Song.find({
                         $or: [
@@ -60,9 +62,10 @@ export const getMadeForYouSongs = async (req, res) => {
 
         if(songs.length < 20){
             // Matched played songs
-            const viewedSongs = await Song.find({ playedBy: currentUserLikes._id });
+            const viewedSongs = await Song.find({ playedBy: user });
             if(viewedSongs.length > 0){
                 const playedSongsIds = viewedSongs.map(song => song._id);
+                // User played songs playlist
                 const playedGenre = [...new Set(viewedSongs.map(song => song.genre))];
                 const playedArtist = [...new Set(viewedSongs.map(song => song.artist))];
                 const playedLanguage = [...new Set(viewedSongs.map(song => song.language))];
@@ -76,10 +79,12 @@ export const getMadeForYouSongs = async (req, res) => {
                             _id: { $nin: playedSongsIds }
                 }).sort({ createdAt: -1 }).limit(20);
                 
+                // Adding Songs with more songs.
                 songs = [...songs, ...moreSongs];
-                songs = songs.filter((song, index, arr) => 
+                // Same name songs will be removed.
+                songs = songs.filter((song, index, arr) => {
                     index === arr.findIndex(s => s._id.toString() === song._id.toString())
-                );
+                });
             }
         }
 
@@ -142,15 +147,18 @@ export const matchedGenre = async (req, res) => {
         let songs = [];
         
         const { userId } = req.auth();
-        const user = await User.findOne({ clerkId: userId }).populate("likedSongs");
+        const userClerk = await User.findOne({ clerkId: userId });
+        const user = userClerk._id;
         if(!user){
             return res.status(400).json({ message: "User not found in matchedGenre" });
         }
 
+        const likedSongs = await Song.find({ likedBy: user });
+
         // Matched liked genre songs       
-        if(user.likedSongs.length > 0){
-            const likedSongIds = user.likedSongs.map(song => song._id);
-            const likedGenre = [...new Set(user.likedSongs.map(song => song.genre))]; 
+        if(likedSongs.length > 0){
+            const likedSongIds = likedSongs.map(song => song._id);
+            const likedGenre = [...new Set(likedSongs.map(song => song.genre))]; 
             songs = await Song.find({
                 genre: { $in: likedGenre },
                 _id: { $nin: likedSongIds }
@@ -159,23 +167,26 @@ export const matchedGenre = async (req, res) => {
 
         // Matched played genre songs
         if(songs.length < 20){
-            const viewedSongs = await Song.find({ playedBy: user._id });
+            const viewedSongs = await Song.find({ playedBy: user });
             if(viewedSongs.length > 0){
                 const playedSongsIds = viewedSongs.map(song => song._id);
                 const playedGenre = [...new Set(viewedSongs.map(song => song.genre))];
-            }
-            let moreSongs = await Song.find({
+                let moreSongs = await Song.find({
                         genre: { $in: playedGenre },
                         _id: { $nin: playedSongsIds }            
                 }).sort({ createdAt: -1 }).limit(20);
-            songs = [...songs, ...moreSongs];
+
+                songs = [...songs, ...moreSongs];
+            }
+            
+            // Filtering dublicate songs
             songs = songs.filter((song, index, arr) =>
                 index === arr.findIndex(s => s._id.toString() === song._id.toString()));
 
         }
         
 
-        // If no liked songs will fetch 
+        // If no liked songs will fetch random
         if(songs.length < 20){
             let randomSongs = await Song.find({
                 _id: { $nin: songs.map(song => song._id) }
@@ -202,15 +213,18 @@ export const matchedLanguage = async (req, res) => {
         let songs = [];
 
         const { userId } = req.auth();
-        const user = await User.findOne({ clerkId: userId }).populate("likedSongs");
+        const userClerk = await User.findOne({ clerkId: userId });
+        const user = userClerk._id;
         if(!userId || !user){
             return res.status(400).json({ message: "User not found in matchedLanguage" });
         }
 
+        const likedSongs = await Song.find({ likedBy: user });
+
         // Matched liked language songs
-        if(user.likedSongs.length > 0){
-            const likedSongIds = user.likedSongs.map(song => song._id);
-            const likedLanguage = [...new Set(user.likedSongs.map(song => song.language))];        
+        if(likedSongs.length > 0){
+            const likedSongIds = likedSongs.map(song => song._id);
+            const likedLanguage = [...new Set(likedSongs.map(song => song.language))];        
             songs = await Song.find({
                 language: { $in: likedLanguage },
                 _id: { $nin: likedSongIds }        
@@ -219,7 +233,7 @@ export const matchedLanguage = async (req, res) => {
 
         // Matched played language songs
         if(songs.length < 20){
-            const viewedSongs = await Song.find({ playedBy: user._id });
+            const viewedSongs = await Song.find({ playedBy: user });
 
             if(viewedSongs.length > 0){
                 const playedSongsIds = viewedSongs.map(song => song._id);
@@ -231,6 +245,7 @@ export const matchedLanguage = async (req, res) => {
 
                 songs = [...songs, ...moreSongs];
             }
+            // Filtering songs
             songs = songs.filter((song, index, arr) => 
                 index === arr.findIndex(s => s._id.toString() === song._id.toString()));
 
@@ -261,18 +276,21 @@ export const matchedLanguage = async (req, res) => {
 export const getLikedSongs = async (req, res) => {
     try {
         const { userId } = req.auth();
-        const currentUser = await User.findOne({ clerkId: userId });
-        if(!userId || !currentUser){
-            return res.status(400).json({ message: "Error in getLiked Somgs" });
+        if(!userId){
+            return res.status(400).json({ message: "Error in getLiked Somgs while params" });
         }
+        const userClerk = await User.findOne({ clerkId: userId });
+        if(!userClerk){
+            return res.status(400).json({ message: "Error in getLiked Somgs while usrClerk" });
+        }
+        const user = userClerk._id;
 
-        const songs = await Song.find({ likedBy: currentUser._id })
-        .populate("likedBy").sort({ createdAt: -1 });
+        const songs = await Song.find({ likedBy: user }).sort({ createdAt: -1 });
         if(songs.length === 0){
             return res.status(404).json({ message: "No Songs found" });
         }
 
-        res.status(200).json({ likedSongs: songs });
+        res.status(200).json({ songs });
     } catch (error) {
         console.error("Error in getMadeForYouSongs:", error);
         res.status(500).json({ message: "Internal Server Error" });
@@ -286,17 +304,26 @@ export const getRecentlyPlayedSongs = async (req, res) => {
       return res.status(400).json({ message: "User not authenticated" });
     }
 
-    const currentUser = await User.findOne({ userId }).populate("recentlyPlayed");
-
+    const userClerk = await User.findOne({ clerkId: userId });
     if (!currentUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found in getRecentlyPlayed" });
     }
 
-    if(currentUser.recentlyPlayed.length > 20){
-    currentUser.recentlyPlayed.slice(0, 20);
-    await currentUser.save();
+    const user = userClerk._id;
+
+    const playedSongs = await Song.find({ playedBy: user });
+    if(playedSongs.length <= 0) {
+        return res.status(404).json({ message: "Songs not found ind getRecentlyPlayedSongs"})
     }
-    res.status(200).json({ recentlyPlayedSongs: currentUser.recentlyPlayed });
+
+    const songs = playedSongs.filter((song, index, arr) => {
+        index === arr.findIndex(s => s._id.toString() === song._id.toString())
+    })
+
+    if(songs.length > 20){
+        songs.slice(0, 20);
+    }
+    res.status(200).json({ songs });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
