@@ -20,8 +20,12 @@ const FeaturedSection = () => {
                         <img src={ song.imageUrl } title={ song.title } className="w-16 lg:w-20 h-16 md:h-20 
                         object-cover flex-shrink-0 rounded-lg" />
                         <div className="flex-1 p-4">
-                            <p className="font-medium truncate group-hover:text-green-500 group-active:text-green-500">{ song.title }</p>
-                            <p className="text-sm truncate group-hover:text-green-500 group-active:text-green-500">{ song.artist }</p>
+                            <p className="font-medium truncate text-white/80 group-hover:text-green-500 group-active:text-green-500 transition-colors">
+                                { song.title }
+                            </p>
+                            <p className="text-sm truncate text-white/50 group-hover:text-white group-active:text-white transition-colors">
+                                { song.artist }
+                            </p>
                         </div>
                     </div>
                 ))}
