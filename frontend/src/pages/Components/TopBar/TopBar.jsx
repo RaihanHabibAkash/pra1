@@ -8,11 +8,11 @@ import { cn } from '@/lib/utils.js';
 import { buttonVariants } from '@/components/ui/button.jsx';
 
 const TopBar = () => {
-  const { isAdmin } = authStore(); 
+  const { isAdmin } = authStore();
 
   return (
-    <div className="w-full h-10 bg-zinc-900 flex items-center backdrop-blur-lg sticky top-0 p-4 z-10 
-    border-t-2 border-b-2 border-green-500/50 rounded-lg justify-around">
+    <div className="w-full h-14 bg-zinc-900 flex items-center backdrop-blur-lg sticky top-0 p-4 z-10 
+    border-t-2 border-b-2 border-green-500/35 rounded-lg justify-around">
       
         <div className="flex items-center gap-2">
           <a href="https://github.com/RaihanHabibAkash" target="_blank">
