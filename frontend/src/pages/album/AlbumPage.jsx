@@ -156,19 +156,16 @@ const AlbumPage = () => {
   } else {
       return (
         <div className="h-full">
-            <ScrollArea className="h-full">
+            <ScrollArea className="h-full rounded-lg">
               <div className="relative min-h-screen">
                 {/* Background Color */}
-              <div
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none z-0"
-            style={gradientStyle}
-          />
+              <div aria-hidden="true"  style={gradientStyle}
+             className="absolute inset-0 pointer-events-none z-0"/>
 
                 {/* Content */}
                 <div className="relative z-10">
                   {/* Album Header */}
-                  <div className="flex p-4 gap-6 pb-8 justify-center">
+                  <div className="flex p-8 gap-4 pb-8 justify-center">
                     <img src={currentAlbum?.imageUrl} alt={currentAlbum?.title}
                     className="size-40 shadow-lg object-co
                     ver rounded-full" />
@@ -180,7 +177,7 @@ const AlbumPage = () => {
                       <h2 className="text-7xl font-bold my-4">
                         { currentAlbum?.title }
                       </h2>
-                      <div className="flex items-center gap-2 text-sm text-zinc-200">
+                      <div className="flex items-center gap-2 text-sm text-white">
                         <span className="font-medium text-white">
                           • { currentAlbum?.songs.length } songs
                         </span>
@@ -192,15 +189,15 @@ const AlbumPage = () => {
                   </div>
                   {/* Play Button */}
                     <div className="px-6 pb-4 flex items-center gap-6">
-                      <Button size="icon" className="size-14 rounded-full bg-green-500 hover:bg-green-400 
-                      hover:scale-110 hover:border-4 hover:border-black transition-all cursor-pointer">
-                        <Play className="size-7 text-black" />
+                      <Button size="icon" className="size-14 group rounded-full bg-green-500 hover:bg-green-400 
+                      border-4 hover:scale-120 hover:border-black transition-all cursor-pointer">
+                        <Play className="size-7 text-black group-hover:text-white" />
                       </Button>
                     </div>
 
                     {/* Table Section */}
                     <div className="grid grid-cols-[16px_3fr_2fr_1fr] gap-4 px-10 py-2 
-                    text-sm text-zinc-400 bg-zinc-800 border-b border-white/40">
+                    text-sm text-white/80 bg-zinc-800 border-b-2 border-t-2 border-green-500">
                       <div>#</div>
                       <div>Title</div>
                       <div>Released Date</div>
@@ -213,27 +210,27 @@ const AlbumPage = () => {
                     <div className="px-6">
                       <div className="space-y-2 py-4">
                         {currentAlbum?.songs.map((song, index) => (
-                          <div key={song._id} className="grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm
-                          text-zinc-400 hover:bg-zinc-800 hover:border-1 hover:border-white hover:scale-105 rounded-md group cursor-pointer">
+                          <div key={song._id} className="grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm rounded-md
+                         group text-white/50 border-b-2 hover:bg-zinc-800 hover:border-green-500 cursor-pointer">
 
                             <div className="flex items-center justify-center">
                               <span className="group-hover:hidden">{ index + 1 }</span>
-                              <Play className="h-4 w-4 hidden group-hover:block" />
+                              <Play className="size-4 hidden text-green-500 group-hover:block" />
                             </div>
 
                             <div className="flex items-center gap-3">
                               <img src={song.imageUrl} alt={song.title} className="size-10 rounded-lg" />
                               <div>
-                                <div className="font-medium text-white">{song.title}</div>
-                                  <div>{song.artist}</div>
+                                <div className="font-medium text-white group-hover:text-green-500">{song.title}</div>
+                                  <div className="group-hover:text-white">{song.artist}</div>
                                 </div>
                             </div>
 
-                            <div className="flex items-center">
+                            <div className="flex items-center group-hover:text-white">
                               { song.createdAt.split("T")[0] }
                             </div>
 
-                            <div className="flex items-center">
+                            <div className="flex items-center group-hover:text-white">
                               { formatTime(song.duration) }
                             </div>
 
