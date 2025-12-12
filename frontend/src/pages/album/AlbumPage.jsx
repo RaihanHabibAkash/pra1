@@ -210,7 +210,7 @@ const AlbumPage = () => {
                     <div className="px-6">
                       <div className="space-y-2 py-4">
                         {currentAlbum?.songs.map((song, index) => (
-                          <div key={song._id} className="grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm rounded-md
+                          <div key={song._id} className="grid grid-cols-[16px_3fr_2fr_1fr] gap-4 px-4 py-2 text-sm rounded-md
                          group text-white/50 border-b-2 hover:bg-zinc-800 hover:border-green-500 cursor-pointer">
 
                             <div className="flex items-center justify-center">
