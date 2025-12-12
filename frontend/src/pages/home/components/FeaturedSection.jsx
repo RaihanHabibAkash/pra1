@@ -1,4 +1,5 @@
 import { FeaturedGridSkeleton } from "@/components/skeletons/FeaturedSectionSkeleton";
+import { Button } from "@/components/ui/button";
 import { musicStore } from "@/stores/musicStore"
 import { useState } from "react";
 
@@ -20,10 +21,10 @@ const FeaturedSection = () => {
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl mb-4 lg:mb-8">
                         Good Morning
                     </h2>
-                    <p className="text-sm text-white border-dotted border-b-2 border-white/50 cursor-pointer"
+                    <Button variant="link" className="text-sm text-white border-l-2 border-r-2 border-white/50 cursor-pointer"
                     onClick={() => setClicked(true)}>
                         See more
-                    </p>
+                    </Button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
@@ -60,10 +61,10 @@ const FeaturedSection = () => {
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl mb-4 lg:mb-8">
                         Good Morning
                     </h2>
-                    <p className="text-sm text-white border-dotted border-b-2 border-white/50 cursor-pointer"
+                    <Button variant="link" className="text-sm text-white border-l-2 border-r-2 border-white/50 cursor-pointer"
                     onClick={() => setClicked(false)}>
-                        See Less
-                    </p>
+                        See less
+                    </Button>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
