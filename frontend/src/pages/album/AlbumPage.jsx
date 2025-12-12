@@ -58,7 +58,7 @@ const AlbumPage = () => {
       
       rgb(${colors.r1}, ${colors.g1}, ${colors.b1}) 10%,
       rgb(${colors.r2}, ${colors.g2}, ${colors.b2}) 30%,
-      rgb(0,0,0) 90%
+      rgb(40,40,40) 80%
     )`
   };
 
