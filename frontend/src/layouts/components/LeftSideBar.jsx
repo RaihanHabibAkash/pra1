@@ -22,7 +22,7 @@ const LeftSideBar = () => {
           <Link to={"/"} className={cn(
             buttonVariants({
               variant: "ghost",
-              className: "w-full justify-start text-white bg-zinc-900 border-b-2 hover:border-green-500 hover:text-green-500"
+              className: "w-full justify-start text-white bg-zinc-900 border-b-2 border-r-2 hover:border-green-500 hover:text-green-500"
             })
           )}>
             <HomeIcon className="size-6 mr-1" />
@@ -31,7 +31,7 @@ const LeftSideBar = () => {
           <Link to={"/albums"} className={cn(
             buttonVariants({
               variant: "ghost",
-              className: "w-full justify-start text-white bg-zinc-900 border-b-2 hover:border-green-500 hover:text-green-500"
+              className: "w-full justify-start text-white bg-zinc-900 border-b-2 border-r-2 hover:border-green-500 hover:text-green-500"
             })
           )}>
             <LibraryIcon className="size-6 mr-1" />
@@ -56,7 +56,7 @@ const LeftSideBar = () => {
               albums.map(album => (
                 <Link to={`/albums/${album._id}`} key={album._id} 
                 className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer border-b-2
-                hover:border-green-500">
+                border-l-2 hover:border-green-500">
                   <img src={album.imageUrl} alt={album.title} className="size-12 rounded-md flex-shrink-0 object-cover"/>
                     <p className="font-medium truncate flex-1 group-hover:text-green-500">
                       {album.title}

@@ -191,7 +191,7 @@ const AlbumPage = () => {
                     <div className="px-6 pb-4 flex items-center gap-6">
                       <Button size="icon" className="size-14 group rounded-full bg-green-500 hover:bg-green-400 
                       border-4 hover:scale-120 hover:border-black transition-all cursor-pointer">
-                        <Play className="size-7 text-black group-hover:text-white" />
+                        <Play className="size-7 text-black group-hover:text-white group-hover:animate-pulse" />
                       </Button>
                     </div>
 
@@ -215,7 +215,7 @@ const AlbumPage = () => {
 
                             <div className="flex items-center justify-center">
                               <span className="group-hover:hidden">{ index + 1 }</span>
-                              <Play className="size-4 hidden text-green-500 group-hover:block" />
+                              <Play className="size-4 hidden text-green-500 group-hover:block group-hover:animate-pulse" />
                             </div>
 
                             <div className="flex items-center gap-3">
