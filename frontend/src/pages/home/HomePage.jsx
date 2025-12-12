@@ -3,6 +3,7 @@ import TopBar from '../Components/TopBar/TopBar.jsx';
 import { ScrollArea } from '@/components/ui/scroll-area.jsx';
 import { musicStore } from '@/stores/musicStore.js';
 import FeaturedSection from './components/FeaturedSection.jsx';
+import MadeForYouSection from './components/MadeForYouSection.jsx';
 
 const HomePage = () => {
   const { 
@@ -40,7 +41,7 @@ const HomePage = () => {
       <ScrollArea className="h-[calc(100vh-200px)]">
         <div className="p-4 sm:p-6 flex flex-col">
           <FeaturedSection />
-
+          <MadeForYouSection />
         </div>
       </ScrollArea>
     </main>
