@@ -4,10 +4,10 @@ import { User } from "../models/user.model.js";
 // Done
 export const getFeaturedSongs = async (req, res) => {
     try {
-        const songs = await Song.aggregate([
+        const forSongs = await Song.aggregate([
             {
-                // Pick 6 random songs
-                $sample: {size: 6}
+                // Pick 10 random songs.
+                $sample: {size: 10}
             },
             {
                 // Tells MongoDB which fields to include in the output
@@ -20,9 +20,11 @@ export const getFeaturedSongs = async (req, res) => {
                 }
             }
         ]);
-        if(songs.length == 0){
+        if(forSongs.length == 0){
             return res.status(404).json({ message: "Songs Not Found" });
         }
+        // Making Songs array 2x. because it's not enought.
+        const songs = [ ...forSongs, ...forSongs ];
         res.status(200).json({ songs });
     } catch (error) {
         console.log("Error in getAllSongs", error);
@@ -105,7 +107,7 @@ export const getMadeForYouSongs = async (req, res) => {
         if(songs.length === 0){
             return res.status(404).json({ message: "Songs not found" });
         }
-        songs = songs.slice(0 , 20)
+        songs = songs.slice(0 , 20);
         res.status(200).json({ songs });
     } catch (error) {
         console.error("Error in getMadeForYouSongs", error);
@@ -123,7 +125,7 @@ export const getTrendingSongs = async (req, res) => {
                 }
             },
             {
-                $limit: 10
+                $limit: 20
             },
             {
                 $project: {
