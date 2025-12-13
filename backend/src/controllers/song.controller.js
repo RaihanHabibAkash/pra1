@@ -107,7 +107,10 @@ export const getMadeForYouSongs = async (req, res) => {
         if(songs.length === 0){
             return res.status(404).json({ message: "Songs not found" });
         }
-        songs = songs.slice(0 , 20);
+        
+        if(songs.length > 20) {
+            songs = songs.slice(0 , 20);
+        }
         res.status(200).json({ songs });
     } catch (error) {
         console.error("Error in getMadeForYouSongs", error);
