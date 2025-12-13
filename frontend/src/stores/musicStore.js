@@ -47,7 +47,7 @@ export const musicStore = create(set => {
 
             try {
                 const response = await axiosInstance.get("/songs/made-for-you-songs");
-                set({ madeForYouSongs: response.data });
+                set({ madeForYouSongs: response.data.songs });
             } catch (error) {
                 set({ error: error.response.data.message })
             } finally {
@@ -61,7 +61,7 @@ export const musicStore = create(set => {
 
             try {
                 const response = await axiosInstance.get("/songs/trending-songs");
-                set({ trendingSongs: response.data });
+                set({ trendingSongs: response.data.songs });
             } catch (error) {
                 set({ error: error.response.data.message })
             } finally {
@@ -75,7 +75,7 @@ export const musicStore = create(set => {
 
             try {
                 const response = await axiosInstance("/songs/fav-genre-songs");
-                set({ favGenreSongs: response.data });
+                set({ favGenreSongs: response.data.songs });
             } catch (error) {
                 set({ error: error.response.data.message })
             } finally {
@@ -89,7 +89,7 @@ export const musicStore = create(set => {
 
             try {
                 const response = await axiosInstance("/songs/fav-language-songs");
-                set({ favLanguageSongs: response.data });
+                set({ favLanguageSongs: response.data.songs });
             } catch (error) {
                 set({ error: error.response.data.message })
             } finally {
@@ -103,7 +103,7 @@ export const musicStore = create(set => {
 
             try {
                 const response = await axiosInstance("/songs/liked-songs");
-                set({ likedSongs: response.data });
+                set({ likedSongs: response.data.songs });
             } catch (error) {
                 set({ error: error.response.data.message })
             } finally {
