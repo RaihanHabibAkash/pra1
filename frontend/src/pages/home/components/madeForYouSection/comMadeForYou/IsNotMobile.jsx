@@ -63,7 +63,7 @@ const IsNotMobile = () => {
             </h2>
             <Button variant="link" onClick={ () => setIsClicked(false) } 
             className="cursor-pointer border-r-2 border-l-2 border-white/50 hover:text-white">
-              See more
+              See less
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4 gap-8">

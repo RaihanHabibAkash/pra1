@@ -62,7 +62,7 @@ const IsMobile = () => {
             </h2>
             <Button variant="link" onClick={ () => setIsClicked(false) } 
             className="cursor-pointer border-r-2 border-l-2 border-white/50 hover:text-white">
-              See more
+              See less
             </Button>
           </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
