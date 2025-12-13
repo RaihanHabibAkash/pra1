@@ -315,8 +315,7 @@ export const getLikedSongs = async (req, res) => {
 // Done
 export const getRecentlyPlayedSongs = async (req, res) => {
   try {
-    // const { userId } = req.auth();
-    const userId = "user_368zGvjtbDr0b2tHDofDhTdNzOL";
+    const { userId } = req.auth();
     if (!userId) {
       return res.status(400).json({ message: "User not authenticated" });
     }
