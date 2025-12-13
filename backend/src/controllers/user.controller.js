@@ -1,9 +1,10 @@
 import { Song } from "../models/song.model.js";
 import { User } from "../models/user.model.js";
-
+// Done
 export const toggleLike = async (req, res) => {
     try {
-        const { userId } = req.auth();
+        // const { userId } = req.auth();
+        const userId = "user_368zGvjtbDr0b2tHDofDhTdNzOL";
         const { id } = req.params;
         if(!userId || !id){
             return res.status(400).json({ message: "Did not found song or user"});
@@ -44,7 +45,7 @@ export const toggleLike = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const addToRecentlyPlayed = async (req, res) => {
   try {
     const { userId } = req.auth();

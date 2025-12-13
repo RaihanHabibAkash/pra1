@@ -117,7 +117,7 @@ export const getMadeForYouSongs = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const getTrendingSongs = async (req, res) => {
     try {
         const songs = await Song.aggregate([
@@ -150,7 +150,7 @@ export const getTrendingSongs = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const matchedGenre = async (req, res) => {
     try {
         let songs = [];
@@ -219,18 +219,21 @@ export const matchedGenre = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const matchedLanguage = async (req, res) => {
     try {
         let songs = [];
 
         const { userId } = req.auth();
+        if(!userId) {
+            return res.status(401).json({ message: "Error while req.auth in mathchedLanguage" })
+        }
         const userClerk = await User.findOne({ clerkId: userId });
         if(!userClerk) {
             return res.status(404).json({ message: "User not found in matchedLanguage" })
         }
         const user = userClerk._id;
-        if(!userId || !user){
+        if(!user){
             return res.status(400).json({ message: "User not found in matchedLanguage" });
         }
 
@@ -266,7 +269,7 @@ export const matchedLanguage = async (req, res) => {
 
         }
 
-        // If no liked songs will fetch 
+        // If no liked songs will fetch random song
         if(songs.length < 20){
             let randomSongs = await Song.find({
                 _id: { $nin: songs.map(song => song._id) }
@@ -287,7 +290,7 @@ export const matchedLanguage = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const getLikedSongs = async (req, res) => {
     try {
         const { userId } = req.auth();
@@ -309,10 +312,11 @@ export const getLikedSongs = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" });
     }
 }
-
+// Done
 export const getRecentlyPlayedSongs = async (req, res) => {
   try {
-    const { userId } = req.auth();
+    // const { userId } = req.auth();
+    const userId = "user_368zGvjtbDr0b2tHDofDhTdNzOL";
     if (!userId) {
       return res.status(400).json({ message: "User not authenticated" });
     }
@@ -326,12 +330,14 @@ export const getRecentlyPlayedSongs = async (req, res) => {
 
     const playedSongs = await Song.find({ playedBy: user });
 
-    const songs = playedSongs.filter((song, index, arr) => {
-        index === arr.findIndex(s => s._id.toString() === song._id.toString())
-    })
+    let songs = playedSongs.filter((song, index, arr) => {
+        return index === arr.findIndex(
+            s => s._id.toString() === song._id.toString()
+        );
+    });
 
     if(songs.length > 20){
-        songs.slice(0, 20);
+       songs = songs.slice(0, 20);
     }
 
     const forSongs = songs || null;
