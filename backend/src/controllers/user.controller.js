@@ -55,7 +55,7 @@ export const addToRecentlyPlayed = async (req, res) => {
     }
 
     const user = await User.findOne({ clerkId: userId });
-    const song = await Song.findById({songId});
+    const song = await Song.findById(songId);
 
     if (!user || !song) {
       return res.status(404).json({ message: "User or song not found" });
