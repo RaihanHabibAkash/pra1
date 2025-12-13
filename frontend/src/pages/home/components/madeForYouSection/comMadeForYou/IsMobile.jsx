@@ -29,8 +29,8 @@ const IsMobile = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     { notClickedSongs.map(song => (
-                        <div key={ song._id } className="flex items-center bg-zinc-900/50 rounded-md overflow-hidden border-b-2 
-                        hover:bg-transparent active:bg-transparent hover:border-green-500 active:border-green-500
+                        <div key={ song._id } className="flex items-center bg-zinc-700 rounded-md overflow-hidden border-b-2 
+                        hover:bg-zinc-900 active:bg-zinc-900 hover:border-green-500 active:border-green-500
                         transition-colors group cursor-pointer relative">
                             <img src={ song.imageUrl } title={ song.title } className="w-16 lg:w-20 h-16 md:h-20 
                             object-cover flex-shrink-0 rounded-lg" />
@@ -67,8 +67,8 @@ const IsMobile = () => {
           </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     { clickedSongs.map(song => (
-                        <div key={ song._id } className="flex items-center bg-zinc-900/50 rounded-md overflow-hidden border-b-2 
-                        hover:bg-transparent active:bg-transparent hover:border-green-500 active:border-green-500
+                        <div key={ song._id } className="flex items-center bg-zinc-700 rounded-md overflow-hidden border-b-2 
+                        hover:bg-zinc-900 active:bg-zinc-900 hover:border-green-500 active:border-green-500
                         transition-colors group cursor-pointer relative">
                             <img src={ song.imageUrl } title={ song.title } className="w-16 lg:w-20 h-16 md:h-20 
                             object-cover flex-shrink-0 rounded-lg" />

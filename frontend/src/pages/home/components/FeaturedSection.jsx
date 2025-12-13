@@ -46,8 +46,9 @@ const FeaturedSection = () => {
                             </div>
                         </div>
                     ))}
+                </div>                
                 </div>
-                </div>
+                
             )
         }
     // If Clicked
