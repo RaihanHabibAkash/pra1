@@ -3,7 +3,7 @@ import TopBar from '../Components/TopBar/TopBar.jsx';
 import { ScrollArea } from '@/components/ui/scroll-area.jsx';
 import { musicStore } from '@/stores/musicStore.js';
 import FeaturedSection from './components/FeaturedSection.jsx';
-import MadeForYouSection from './components/MadeForYouSection.jsx';
+import MadeForYouSection from './components/madeForYouSection/MadeForYouSection.jsx';
 
 const HomePage = () => {
   const { 

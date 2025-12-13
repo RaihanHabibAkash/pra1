@@ -3,12 +3,14 @@ import { Button } from "@/components/ui/button";
 import { musicStore } from "@/stores/musicStore";
 import { useState } from "react";
 
-const MadeForYouSection = () => {
-  const { isLoading, madeForYouSongs } = musicStore();
-  const notClickedSongs = madeForYouSongs.slice(0, 4);
-  const forClickedSongs = [ ...madeForYouSongs, ...madeForYouSongs ];
-  const clickedSongs = forClickedSongs.slice(0, 20);
-  const [ isClicked, setIsClicked ] = useState(false);
+const IsNotMobile = () => {
+    const { isLoading, madeForYouSongs } = musicStore();
+    
+    // Songs array resizeing
+    const notClickedSongs = madeForYouSongs.slice(0, 4);
+    const forClickedSongs = [ ...madeForYouSongs, ...madeForYouSongs ];
+    const clickedSongs = forClickedSongs.slice(0, 20);
+    const [ isClicked, setIsClicked ] = useState(false);
   if(!isClicked) {
     if(isLoading){
        return <MadeForYouSectionSkeleton />
@@ -88,7 +90,8 @@ const MadeForYouSection = () => {
         </div>
       )
     }   
-  }
+  } 
+
 }
 
-export default MadeForYouSection;
+export default IsNotMobile;
