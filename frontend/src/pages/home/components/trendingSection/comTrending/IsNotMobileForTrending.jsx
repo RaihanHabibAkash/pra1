@@ -1,16 +1,27 @@
 import MadeForYouSectionSkeleton from "@/components/skeletons/MadeForYouSectionSkeleton";
 import { Button } from "@/components/ui/button";
+import { shuffleArray } from "@/forJs/shuffle";
 import { musicStore } from "@/stores/musicStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const IsNotMobileForTrending = () => {
     const { isLoading, trendingSongs } = musicStore();
+    const [ isClicked, setIsClicked ] = useState(false);
+    const [ shuffledSongs, setShuffledSongs ] = useState([]);
+
+    // Array shuffle
+    useEffect(() => {
+      if(trendingSongs.length) {
+        setShuffledSongs(shuffleArray(trendingSongs))
+      }
+    }, [trendingSongs])
+    
     
     // Songs array resizeing
-    const notClickedSongs = trendingSongs.slice(0, 4);
-    const forClickedSongs = [ ...trendingSongs, ...trendingSongs ];
+    const notClickedSongs = shuffledSongs.slice(0, 4);
+    const forClickedSongs = [ ...shuffledSongs, ...shuffledSongs ];
     const clickedSongs = forClickedSongs.slice(0, 20);
-    const [ isClicked, setIsClicked ] = useState(false);
+
   if(!isClicked) {
     if(isLoading){
        return <MadeForYouSectionSkeleton />
