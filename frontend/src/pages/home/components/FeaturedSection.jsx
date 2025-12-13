@@ -7,7 +7,8 @@ const FeaturedSection = () => {
     // Data from zustand
     const { isLoading, featuredSongs } = musicStore();
 
-    const songs = featuredSongs.slice(0, 8);
+    const songs = featuredSongs.slice(0, 9);
+    const moreSongs = featuredSongs.slice(0, 18);
     const [ isClicked, setClicked ] = useState(false);
     if(!isClicked) {
         // If Loading
@@ -16,18 +17,19 @@ const FeaturedSection = () => {
         // If not Loading
         } else {
             return (
-                <div>
+                <div className="mb-8">
                 <div className="flex flex-row items-center justify-between">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl mb-4 lg:mb-8">
+                    <h2 className="text-2xl sm:text-3xl lg:text-4xl mb-4 lg:mb-8 font-bold">
                         Good Morning
                     </h2>
-                    <Button variant="link" className="text-sm text-white border-l-2 border-r-2 border-white/50 cursor-pointer"
+                    <Button variant="link" className="text-sm hover:text-white border-l-2 border-r-2
+                     border-white/50 cursor-pointer"
                     onClick={() => setClicked(true)}>
                         See more
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     { songs.map(song => (
                         <div key={ song._id } className="flex items-center bg-zinc-900/50 rounded-md overflow-hidden border-b-2 
                         hover:bg-transparent active:bg-transparent hover:border-green-500 active:border-green-500
@@ -67,8 +69,8 @@ const FeaturedSection = () => {
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                    { featuredSongs.map(song => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    { moreSongs.map(song => (
                             <div key={ song._id } className="flex items-center bg-zinc-900/50 rounded-md overflow-hidden border-b-2 
                             hover:bg-transparent active:bg-transparent hover:border-green-500 active:border-green-500
                             transition-colors group cursor-pointer relative">
