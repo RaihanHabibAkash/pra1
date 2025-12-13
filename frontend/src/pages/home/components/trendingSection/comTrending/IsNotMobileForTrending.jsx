@@ -28,7 +28,7 @@ const IsNotMobileForTrending = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-4 gap-8">
             { notClickedSongs.map(song => (
-              <div key={ song._id } className="bg-zinc-800 p-4 rounded-md hover:bg-zinc-700 active:bg-zinc-700 
+              <div key={ song._id } className="bg-zinc-900 p-4 rounded-md hover:bg-zinc-700 active:bg-zinc-700 
                 transition-all group cursor-pointer group border-b-4 hover:border-green-500 active:border-green-500">
                 <div className="relative mb-4 border-b-4">
                   <div className="aspect-square rounded-md h-40 sm:h-50 lg:h-full shadow-lg overflow-hidden">
@@ -68,7 +68,7 @@ const IsNotMobileForTrending = () => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-4 gap-8">
             { clickedSongs.map(song => (
-              <div key={ song._id } className="bg-zinc-800 p-4 rounded-md hover:bg-zinc-700  active:bg-zinc-700
+              <div key={ song._id } className="bg-zinc-900 p-4 rounded-md hover:bg-zinc-700  active:bg-zinc-700
                 transition-all group cursor-pointer group border-b-4 hover:border-green-500 active:border-green-500">
                 <div className="relative mb-4 border-b-4">
                   <div className="aspect-square rounded-md shadow-lg overflow-hidden">
