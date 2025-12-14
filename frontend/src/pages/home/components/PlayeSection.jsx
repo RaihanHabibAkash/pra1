@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { musicStore } from "@/stores/musicStore"
 import { useState } from "react";
 
-const LikedSection = () => {
+const PlayedSection = () => {
     // Data from zustand
-    const { isLoading, likedSongs } = musicStore();
+    const { isLoading, recentlyPlayedSongs } = musicStore();
     const [ isClicked, setClicked ] = useState(false);
 
-    const songs = likedSongs.slice(0, 6);
-    const moreSongs = [ ...likedSongs, ...likedSongs ];
+    const songs = recentlyPlayedSongs.slice(0, 6);
+    const moreSongs = [ ...recentlyPlayedSongs, ...recentlyPlayedSongs ];
     
     if(!isClicked) {
         // If Loading
@@ -21,7 +21,7 @@ const LikedSection = () => {
                 <div className="mb-8">
                 <div className="flex flex-row items-center justify-between">
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl mb-4 lg:mb-8 font-bold">
-                        Liked Songs
+                        Recently Played
                     </h2>
                     <Button variant="link" className="text-sm hover:text-white border-l-2 border-r-2
                      border-white/50 cursor-pointer"
@@ -32,8 +32,8 @@ const LikedSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     { songs.map(song => (
-                        <div key={ song._id } className="flex items-center bg-zinc-700 rounded-md overflow-hidden border-b-2 
-                        hover:bg-zinc-900 active:bg-zinc-900 hover:border-green-500 active:border-green-500
+                        <div key={ song._id } className="flex items-center bg-zinc-900 rounded-md overflow-hidden border-b-2 
+                        hover:bg-zinc-700 active:bg-zinc-700 hover:border-green-500 active:border-green-500
                         transition-colors group cursor-pointer relative">
                             <img src={ song.imageUrl } title={ song.title } className="w-16 lg:w-20 h-16 md:h-20 
                             object-cover flex-shrink-0 rounded-lg group-hover:scale-105 duration-300" />
@@ -63,7 +63,7 @@ const LikedSection = () => {
                 <div>
                 <div className="flex flex-row items-center justify-between">
                     <h2 className="text-2xl sm:text-3xl lg:text-4xl mb-4 lg:mb-8">
-                        Liked Songs
+                        Recently Played
                     </h2>
                     <Button variant="link" className="text-sm text-white border-l-2 border-r-2 border-white/50 cursor-pointer"
                     onClick={() => setClicked(false)}>
@@ -73,8 +73,8 @@ const LikedSection = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     { moreSongs.map(song => (
-                            <div key={ song._id } className="flex items-center bg-zinc-700 rounded-md overflow-hidden border-b-2 
-                            hover:bg-zinc-900 active:bg-zinc-900 hover:border-green-500 active:border-green-500
+                            <div key={ song._id } className="flex items-center bg-zinc-900 rounded-md overflow-hidden border-b-2 
+                            hover:bg-zinc-700 active:bg-zinc-700 hover:border-green-500 active:border-green-500
                             transition-colors group cursor-pointer relative">
                                 <img src={ song.imageUrl } title={ song.title } className="w-16 lg:w-20 h-16 md:h-20 
                                 object-cover flex-shrink-0 rounded-lg" />
@@ -98,4 +98,4 @@ const LikedSection = () => {
     
 }
 
-export default LikedSection;
+export default PlayedSection;

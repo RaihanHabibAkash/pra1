@@ -8,6 +8,7 @@ import FavGenreSection from './components/favGenreSection/FavGenreSection.jsx';
 import FavLanguageSection from './components/favLanguageSection/FavLanguageSection.jsx';
 import TrendingSection from './components/trendingSection/TrendingSection.jsx';
 import LikedSection from './components/LikedSection.jsx';
+import PlayedSection from './components/PlayeSection.jsx';
 
 const HomePage = () => {
   const { 
@@ -50,6 +51,7 @@ const HomePage = () => {
           <FavGenreSection />
           <FavLanguageSection />
           <LikedSection />
+          <PlayedSection />
         </div>
       </ScrollArea>
     </main>
