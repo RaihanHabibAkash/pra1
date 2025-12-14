@@ -6,7 +6,7 @@ export const playerStore = create((set, get) => {
         isPlaying: false,
         queue: [],
         currentIndex: -1,
-        isShuffling: false,
+        // isShuffling: false,
 
         shuffleQueue: () => {
             const { currentSong, queue } = get();
@@ -30,7 +30,6 @@ export const playerStore = create((set, get) => {
 
             set({
                 queue: newQueue,
-                isShuffling: true,
                 currentIndex
             });
         },
