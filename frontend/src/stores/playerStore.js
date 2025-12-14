@@ -6,6 +6,34 @@ export const playerStore = create((set, get) => {
         isPlaying: false,
         queue: [],
         currentIndex: -1,
+        isShuffling: false,
+
+        shuffleQueue: () => {
+            const { currentSong, queue } = get();
+            if(queue.length < 2) return;
+
+            const newQueue = [...queue];
+            let currentIndex = newQueue.findIndex(s => s._id === currentSong._id);
+
+            const removedSong = newQueue.splice(currentIndex, 1)[0];
+
+            for(let i = newQueue.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+
+                [newQueue[i], newQueue[j]] = [newQueue[j], newQueue[i]];
+            }
+            
+            newQueue.unshift(removedSong);
+            
+            // Remains the index same.
+            currentIndex = newQueue.findIndex(s => s._id === currentSong._id);
+
+            set({
+                queue: newQueue,
+                isShuffling: true,
+                currentIndex
+            });
+        },
 
         initializeQueue: (songs) => {
             set({
