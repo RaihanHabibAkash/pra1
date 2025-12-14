@@ -5,6 +5,7 @@ import { musicStore } from '@/stores/musicStore.js';
 import FeaturedSection from './components/FeaturedSection.jsx';
 import MadeForYouSection from './components/madeForYouSection/MadeForYouSection.jsx';
 import TrendingSongs from './components/trendingSection/TrendingSongs.jsx';
+import FavGenreSection from './components/favGenreSection/FavGenreSection.jsx';
 
 const HomePage = () => {
   const { 
@@ -39,11 +40,12 @@ const HomePage = () => {
   return (
     <main className="bg-gradient-to-b from-zinc-700 to-zinc-900 rounded-lg h-full">
       <TopBar />
-      <ScrollArea className="h-[calc(100vh-200px)]">
+      <ScrollArea className="h-[calc(100vh-180px)]">
         <div className="p-4 sm:p-6 flex flex-col">
           <FeaturedSection />
           <MadeForYouSection />
           <TrendingSongs />
+          <FavGenreSection />
         </div>
       </ScrollArea>
     </main>

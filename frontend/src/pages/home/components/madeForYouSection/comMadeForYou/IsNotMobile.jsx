@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 
 const IsNotMobile = () => {
     const { isLoading, madeForYouSongs } = musicStore();
-    const [ shuffledSongs, setShuffledSongs ] = useState([]);
     const [ isClicked, setIsClicked ] = useState(false);
+    const [ shuffledSongs, setShuffledSongs ] = useState([]);
 
     // Shuffleing in every fetch
     useEffect(() => {

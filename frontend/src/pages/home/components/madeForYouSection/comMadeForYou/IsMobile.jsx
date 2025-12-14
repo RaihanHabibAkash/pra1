@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 
 const IsMobile = () => {
     const { isLoading, madeForYouSongs } = musicStore();
-    const [ shuffledSongs, setShuffledSongs ] = useState([]);
     const [ isClicked, setIsClicked ] = useState(false);
+    const [ shuffledSongs, setShuffledSongs ] = useState([]);
 
     useEffect(() => {
       if(madeForYouSongs.length > 0) {

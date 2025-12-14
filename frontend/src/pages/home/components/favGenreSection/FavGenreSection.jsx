@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import IsNotMobile from "./comMadeForYou/IsNotMobile";
-import IsMobile from "./comMadeForYou/isMobile";
+import IsMobileGenre from "./components/IsMobileGenre.jsx";
+import IsNotMobileGenre from "./components/IsNotMobileGenre.jsx";
+
 
 const FavGenreSection = () => {
   // For Checking the mobile
@@ -17,9 +18,9 @@ const FavGenreSection = () => {
       }, []);
     
   if(isMobile) {
-    return <IsMobile />
+    return <IsMobileGenre />
   } else {
-    return <IsNotMobile />
+    return <IsNotMobileGenre />
   }
    
 }

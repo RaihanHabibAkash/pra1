@@ -1,16 +1,27 @@
 import MadeForYouSectionSkeleton from "@/components/skeletons/MadeForYouSectionSkeleton";
 import { Button } from "@/components/ui/button";
+import { shuffleArray } from "@/forJs/shuffle";
 import { musicStore } from "@/stores/musicStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const IsMobileGenre = () => {
-    const { isLoading, madeForYouSongs } = musicStore();
+    const { isLoading, favGenreSongs } = musicStore();
+    const [ isClicked, setIsClicked ] = useState(false);
+    const [ shuffledSongs, setShuffledSongs ] = useState([]);
+
+    // Shuffleing in every fetch
+    useEffect(() => {
+      if(favGenreSongs.length > 0) {
+        setShuffledSongs(shuffleArray(favGenreSongs))
+      }
+    },[favGenreSongs]);
     
     // Songs array resizeing
-    const notClickedSongs = madeForYouSongs.slice(0, 4);
-    const forClickedSongs = [ ...madeForYouSongs, ...madeForYouSongs ];
+    const notClickedSongs = shuffledSongs.slice(0, 4);
+
+    const forClickedSongs = [ ...shuffledSongs, ...shuffledSongs ];
     const clickedSongs = forClickedSongs.slice(0, 20);
-    const [ isClicked, setIsClicked ] = useState(false);
+    
   if(!isClicked) {
     if(isLoading){
        return <MadeForYouSectionSkeleton />
@@ -19,7 +30,7 @@ const IsMobileGenre = () => {
         <div className="mb-8"> 
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-              Made For You
+              Favourite Genre
             </h2>
             <Button variant="link" onClick={ () => setIsClicked(true) } 
             className="cursor-pointer border-r-2 border-l-2 border-white/50 hover:text-white">
@@ -58,7 +69,7 @@ const IsMobileGenre = () => {
         <div className="mb-8"> 
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-              Made For You
+              Favourite Genre
             </h2>
             <Button variant="link" onClick={ () => setIsClicked(false) } 
             className="cursor-pointer border-r-2 border-l-2 border-white/50 hover:text-white">
