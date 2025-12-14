@@ -103,7 +103,7 @@ export const musicStore = create(set => {
 
             try {
                 const response = await axiosInstance("/songs/liked-songs");
-                set({ likedSongs: response.data.songs });
+                set({ likedSongs: response.data.forSongs });
             } catch (error) {
                 set({ error: error.response.data.message })
             } finally {
