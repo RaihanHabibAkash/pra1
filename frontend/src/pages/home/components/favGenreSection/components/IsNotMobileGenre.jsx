@@ -1,27 +1,16 @@
 import MadeForYouSectionSkeleton from "@/components/skeletons/MadeForYouSectionSkeleton";
 import { Button } from "@/components/ui/button";
-import { shuffleArray } from "@/forJs/shuffle";
 import { musicStore } from "@/stores/musicStore";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const IsNotMobile = () => {
+const IsNotMobileGenre = () => {
     const { isLoading, madeForYouSongs } = musicStore();
-    const [ shuffledSongs, setShuffledSongs ] = useState([]);
-    const [ isClicked, setIsClicked ] = useState(false);
-
-    // Shuffleing in every fetch
-    useEffect(() => {
-      if(madeForYouSongs.length > 0) {
-        setShuffledSongs(shuffleArray(madeForYouSongs))
-      }
-    },[madeForYouSongs]);
     
     // Songs array resizeing
-    const notClickedSongs = shuffledSongs.slice(0, 4);
-
-    const forClickedSongs = [ ...shuffledSongs, ...shuffledSongs ];
+    const notClickedSongs = madeForYouSongs.slice(0, 4);
+    const forClickedSongs = [ ...madeForYouSongs, ...madeForYouSongs ];
     const clickedSongs = forClickedSongs.slice(0, 20);
-    
+    const [ isClicked, setIsClicked ] = useState(false);
   if(!isClicked) {
     if(isLoading){
        return <MadeForYouSectionSkeleton />
@@ -105,4 +94,4 @@ const IsNotMobile = () => {
 
 }
 
-export default IsNotMobile;
+export default IsNotMobileGenre;
