@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import IsMobileForTrending from "./comTrending/IsMobileForTrending";
-import IsNotMobileForTrending from "./comTrending/IsNotMobileForTrending";
+import IsMobileLanguage from "./components/IsMobileLanguage";
+import IsNotMobileLanguage from "./components/IsNotMobileLanguage";
 
-const TrendingSongs = () => {
+
+
+const FavLanguageSection = () => {
   // For Checking the mobile
   const [ isMobile, setIsMobile ] = useState(false);
       useEffect(() => {
@@ -17,11 +19,11 @@ const TrendingSongs = () => {
       }, []);
     
   if(isMobile) {
-    return <IsMobileForTrending />
+    return <IsMobileLanguage />
   } else {
-    return <IsNotMobileForTrending />
+    return <IsNotMobileLanguage />
   }
    
 }
 
-export default TrendingSongs;
+export default FavLanguageSection;

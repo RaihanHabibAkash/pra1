@@ -1,4 +1,4 @@
-import MadeForYouSectionSkeleton from "@/components/skeletons/MadeForYouSectionSkeleton";
+import { FeaturedGridSkeleton } from "@/components/skeletons/FeaturedSectionSkeleton";
 import { Button } from "@/components/ui/button";
 import { shuffleArray } from "@/forJs/shuffle";
 import { musicStore } from "@/stores/musicStore";
@@ -23,7 +23,7 @@ const IsMobile = () => {
     
   if(!isClicked) {
     if(isLoading){
-       return <MadeForYouSectionSkeleton />
+       return <FeaturedGridSkeleton />
     } else {
       return (
         <div className="mb-8"> 
@@ -62,7 +62,7 @@ const IsMobile = () => {
   } else {
   // If not Clicked
     if(isLoading){
-       return <MadeForYouSectionSkeleton />
+       return <FeaturedGridSkeleton />
     } else {
       return (
         <div className="mb-8"> 

@@ -4,17 +4,17 @@ import { shuffleArray } from "@/forJs/shuffle";
 import { musicStore } from "@/stores/musicStore";
 import { useEffect, useState } from "react";
 
-const IsMobileForTrending = () => {
-    const { isLoading, trendingSongs } = musicStore();
+const IsMobileLanguage = () => {
+    const { isLoading, favLanguageSongs } = musicStore();
     const [ isClicked, setIsClicked ] = useState(false);
     const [ shuffledSongs, setShuffledSongs ] = useState([]);
     
       // Array shuffle
       useEffect(() => {
-        if(trendingSongs.length) {
-           setShuffledSongs(shuffleArray(trendingSongs));
+        if(favLanguageSongs.length > 1) {
+           setShuffledSongs(shuffleArray(favLanguageSongs));
         }
-      },[trendingSongs])
+      },[ favLanguageSongs ]);
       
     
     // Songs array resizeing
@@ -30,7 +30,7 @@ const IsMobileForTrending = () => {
         <div className="mb-8"> 
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-              Trending
+              Favourite Language
             </h2>
             <Button variant="link" onClick={ () => setIsClicked(true) } 
             className="cursor-pointer border-r-2 border-l-2 border-white/50 hover:text-white">
@@ -69,7 +69,7 @@ const IsMobileForTrending = () => {
         <div className="mb-8"> 
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-              Trending
+              Favourite Language
             </h2>
             <Button variant="link" onClick={ () => setIsClicked(false) } 
             className="cursor-pointer border-r-2 border-l-2 border-white/50 hover:text-white">
@@ -101,4 +101,4 @@ const IsMobileForTrending = () => {
 
 }
 
-export default IsMobileForTrending;
+export default IsMobileLanguage;

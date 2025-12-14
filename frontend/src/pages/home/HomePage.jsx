@@ -4,8 +4,9 @@ import { ScrollArea } from '@/components/ui/scroll-area.jsx';
 import { musicStore } from '@/stores/musicStore.js';
 import FeaturedSection from './components/FeaturedSection.jsx';
 import MadeForYouSection from './components/madeForYouSection/MadeForYouSection.jsx';
-import TrendingSongs from './components/trendingSection/TrendingSongs.jsx';
 import FavGenreSection from './components/favGenreSection/FavGenreSection.jsx';
+import FavLanguageSection from './components/favLanguageSection/FavLanguageSection.jsx';
+import TrendingSection from './components/trendingSection/TrendingSection.jsx';
 
 const HomePage = () => {
   const { 
@@ -44,8 +45,9 @@ const HomePage = () => {
         <div className="p-4 sm:p-6 flex flex-col">
           <FeaturedSection />
           <MadeForYouSection />
-          <TrendingSongs />
+          <TrendingSection />
           <FavGenreSection />
+          <FavLanguageSection />
         </div>
       </ScrollArea>
     </main>
