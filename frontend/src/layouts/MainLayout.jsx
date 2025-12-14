@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import LeftSideBar from "./components/LeftSideBar";
 import ToRightButton from "./components/ToRightButton";
 import { useEffect, useState } from "react";
+import AudioPlayer from "./components/AudioPlayer";
 
 const MainLayout = () => {
     const [ isMobile, setIsMobile ] = useState(false);
@@ -25,12 +26,16 @@ const MainLayout = () => {
 
             { isMobile ? (
                 <>
+                    {/* Not visible */}
+                    <AudioPlayer />
                     <ToRightButton />
                 </>
                 
             ) : (
                 <>
                     <ResizablePanel id="left" order={1}  defaultSize={25} minSize={0} maxSize={35}>
+                        {/* Not Visible */}
+                        <AudioPlayer />
                         <LeftSideBar />
                     </ResizablePanel>
 
@@ -43,6 +48,9 @@ const MainLayout = () => {
                 <Outlet />
             </ResizablePanel>
         </ResizablePanelGroup>
+        
+        {/* Not done yet */}
+        <PlaybackControls />
     </div>
   )
 }
