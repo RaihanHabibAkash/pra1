@@ -20,7 +20,6 @@ const HomePage = () => {
     fetchLikedSongs,
     fetchRecentlyPlayedSongs
   } = musicStore();
-  console.log(fetchFavGenreSongs);
 
   useEffect(() => {
     fetchFeaturedSongs();
