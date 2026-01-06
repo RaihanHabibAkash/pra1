@@ -20,6 +20,9 @@ const PlaybackControls = () => {
         audioRef.current = document.querySelector("audio");
         const audio = audioRef.current;
 
+        // If no audio element available
+        if (!audio) return; 
+
         const updateTime = () => setCurrentTime(audio.currentTime);
         const updateDuration = () => setDuration(audio.duration);
 
@@ -40,13 +43,13 @@ const PlaybackControls = () => {
 
     // For Dynamic value of time of song
     const handleDynamic = (value) => {
-        if(audioRef.current) {
-            audioRef.current.currentTime = value[0];
-        }
+        if (!audioRef.current) return;
+        const time = Array.isArray(value) ? value[0] : value;
+        audioRef.current.currentTime = time;
     };
 
     return(
-        
+        <div>hlow</div>
     );
 }
 

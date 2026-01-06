@@ -3,7 +3,8 @@ import { Outlet } from "react-router-dom";
 import LeftSideBar from "./components/LeftSideBar";
 import ToRightButton from "./components/ToRightButton";
 import { useEffect, useState } from "react";
-import AudioPlayer from "./components/AudioPlayer";
+import AudioPlayer from "./components/AudioPlayer.jsx";
+import PlaybackControls from "./components/PlaybackControls.jsx";
 
 const MainLayout = () => {
     const [ isMobile, setIsMobile ] = useState(false);

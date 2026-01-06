@@ -10,7 +10,9 @@ export const playerStore = create((set, get) => {
 
         shuffleQueue: () => {
             const { currentSong, queue } = get();
-            if(queue.length < 2) return;
+
+            // guard for null currentSong or too-short queue
+            if (!currentSong || queue.length < 2) return;
 
             const newQueue = [...queue];
             let currentIndex = newQueue.findIndex(s => s._id === currentSong._id);
