@@ -9,8 +9,13 @@ import FavLanguageSection from './components/favLanguageSection/FavLanguageSecti
 import TrendingSection from './components/trendingSection/TrendingSection.jsx';
 import LikedSection from './components/LikedSection.jsx';
 import PlayedSection from './components/PlayeSection.jsx';
+import { useAuth } from '@clerk/clerk-react';
 
 const HomePage = () => {
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if(!isLoaded) return null;
+
   const { 
     fetchFeaturedSongs, 
     fetchMadeForYouSongs, 
@@ -22,6 +27,8 @@ const HomePage = () => {
   } = musicStore();
 
   useEffect(() => {
+    if(!isSignedIn) return;
+
     fetchFeaturedSongs();
     fetchMadeForYouSongs();
     fetchTrendingSongs();
@@ -29,32 +36,39 @@ const HomePage = () => {
     fetchFavLanguageSongs();
     fetchLikedSongs();
     fetchRecentlyPlayedSongs();
-  },[ 
-     fetchFeaturedSongs,
-      fetchMadeForYouSongs,
-      fetchTrendingSongs,
-      fetchFavGenreSongs,
-      fetchFavLanguageSongs,
-      fetchLikedSongs,
-      fetchRecentlyPlayedSongs 
-    ]);
+  },[ isSignedIn ]);
 
-  return (
-    <main className="bg-gradient-to-b from-zinc-700 to-zinc-900 rounded-lg h-full">
-      <TopBar />
-      <ScrollArea className="h-[calc(100vh-180px)]">
-        <div className="p-4 sm:p-6 flex flex-col">
-          <FeaturedSection />
-          <MadeForYouSection />
-          <TrendingSection />
-          <FavGenreSection />
-          <FavLanguageSection />
-          <LikedSection />
-          <PlayedSection />
+  if(!isSignedIn) {
+    return(
+      <main className="bg-gradient-to-b from-zinc-700 to-zinc-900 rounded-lg h-full">
+        <TopBar />
+        <div className="mt-20">
+          <h2 className="text-green-500 text-4xl sm:text-7xl truncate text-center animate-pulse duration-300">
+            Please Log IN
+          </h2>
         </div>
-      </ScrollArea>
-    </main>
-  );
+      </main>
+    );
+  } else {
+    return (
+      <main className="bg-gradient-to-b from-zinc-700 to-zinc-900 rounded-lg h-full">
+        <TopBar />
+        <ScrollArea className="h-[calc(100vh-180px)]">
+          <div className="p-4 sm:p-6 flex flex-col">
+            <FeaturedSection />
+            <MadeForYouSection />
+            <TrendingSection />
+            <FavGenreSection />
+            <FavLanguageSection />
+            <LikedSection />
+            <PlayedSection />
+          </div>
+        </ScrollArea>
+      </main>
+    );
+  }
+
+  
 }
 
 export default HomePage;
