@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { albumStore } from "@/stores/albumStore";
+import { musicStore } from "@/stores/musicStore";
+import { playerStore } from "@/stores/playerStore";
 import { Clock, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -30,12 +32,32 @@ const AlbumPage = () => {
 
     const { albumId } = useParams();
     const { fetchAlbumById, currentAlbum } = albumStore();
+    const { currentSong, isPlaying, playAlbum, togglePlay } = playerStore();
 
     useEffect(() => {
       if(albumId) {
         fetchAlbumById(albumId)
       }
     },[fetchAlbumById, albumId]);
+
+    const handlePlaySong = (index) => {
+      if(!currentAlbum) return;
+
+      playAlbum(currentAlbum.songs, index)
+    }
+
+    const handlePlayAlbum = () => {
+      if(!currentAlbum) return;
+
+      const isCurrentAlbumPlaying = currentAlbum.songs.some(song => song._id === currentSong._id);
+      if(isCurrentAlbumPlaying) {
+        togglePlay()
+      }
+      else {
+        playAlbum(currentAlbum?.songs, 0)
+      }  
+    }
+
 
     // For Random Colors
     const [ colors, setColors ] = useState({ 
