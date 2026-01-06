@@ -37,9 +37,6 @@ const AlbumPage = () => {
       }
     },[fetchAlbumById, albumId]);
 
-    console.log(currentAlbum)
-
-
     // For Random Colors
     const [ colors, setColors ] = useState({ 
                                     r1: 0, g1: 0, b1: 0,
