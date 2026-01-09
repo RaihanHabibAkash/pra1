@@ -45,9 +45,7 @@ export const playerStore = create((set, get) => {
         },
 
         playAlbum: (songs, startIndex = 0) => {
-            if(songs.length === 0) {
-                return
-            }
+            if(songs.length === 0) return;
 
             // Will access from the first song
             const song = songs[startIndex];

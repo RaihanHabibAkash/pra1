@@ -11,10 +11,10 @@ const formatTime = (seconds) => {
 };
 
 const PlaybackControls = () => {
-    const { currentSong, isPlaying, togglePlay, playNext, playPrevious }= playerStore();
-    const [volume, setVolume] = useState(75);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
+    const { currentSong, isPlaying, togglePlay, playNext, playPrevious, shuffleQueue }= playerStore();
+    const [ volume, setVolume ] = useState(75);
+    const [ currentTime, setCurrentTime ] = useState(0);
+    const [ duration, setDuration ] = useState(0);
     const audioRef = useRef(null);
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const PlaybackControls = () => {
     };
 
     return(
-        <footer className="h-20 sm:h-24 bg-zinc-900 border-t border-zinc-800 px-4">
+        <footer className="h-20 sm:h-24 bg-zinc-900 border-t-4 border-green-500 px-4">
             <div className="flex justify-between items-center h-full max-w-[1800px] mx-auto">
                 {/* Current Playing Song */}
                 <div className="hidden sm:flex items-center gap-4 min-w-[180px] w-[30%]">
@@ -70,38 +70,38 @@ const PlaybackControls = () => {
                 {/* Playback Controls */}
                 <div className="flex flex-col items-center gap-2 flex-1 max-w-full sm:max-w-[45%]">
                     <div className="flex items-center gap-4 sm:gap-6">
-                        <Button size="icon" variant="ghost"
-							className="hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer">
-							<Shuffle className="size-4" />
+                        <Button size="icon" variant="ghost" onClick={shuffleQueue}
+							className="hidden sm:inline-flex hover:text-white text-white/50 cursor-pointer">
+							<Shuffle className="size-6" />
 						</Button>
 
                         <Button size="icon" variant="ghost" className="text-white/50 hover:text-white active:text-white cursor-pointer">
-                            <Heart className="size-4 text-red-500" fill="currentColor" /> 
+                            <Heart className="size-6 text-red-500" fill="currentColor" /> 
                         </Button>
 
                         <Button size="icon" variant="ghost" className="hover:text-white text-zinc-400 cursor-pointer" 
                         onClick={playPrevious} disabled={!currentSong}>
-							<SkipBack className="size-4" />
+							<SkipBack className="size-8" />
 						</Button>
 
-                        <Button size="icon" className="bg-white hover:bg-white/80 text-black rounded-full size-8 cursor-pointer"
+                        <Button size="icon" className="bg-white hover:bg-white/80 text-black rounded-full size-12 cursor-pointer"
 							onClick={togglePlay} disabled={!currentSong}>
 							{ isPlaying ? 
-                                <Pause className="size-5" /> : <Play className="size-5" /> 
+                                <Pause className="size-8" /> : <Play className="size-8" /> 
                             }
 						</Button>
 
                         <Button size="icon" variant="ghost" className="hover:text-white text-white/50 cursor-pointer" 
                         onClick={playNext}  disabled={!currentSong} >
-							<SkipForward className="size-5" />
+							<SkipForward className="size-8" />
 						</Button>
 
                         <Button size="icon" variant="ghost" className="text-white/50 hover:text-white active:text-white cursor-pointer">
-                            <ListPlus className="size-4" /> 
+                            <ListPlus className="size-6" /> 
                         </Button>
 
                         <Button size="icon" variant="ghost" className="hidden sm:inline-flex hover:text-white text-zinc-400 cursor-pointer">
-							<Repeat className="size-4" />
+							<Repeat className="size-6" />
 						</Button>
                     </div>
                     <div className="hidden sm:flex items-center gap-2 w-full">
@@ -127,13 +127,14 @@ const PlaybackControls = () => {
                                     <Volume1 className="size-4" />
                                 ) 
                             }
-                            
                         </Button>
                         <Slider value={[volume]} max={100} step={1}
 							className="w-24 hover:cursor-grab active:cursor-grabbing"
 							onValueChange={(value) => {
 								setVolume(value[0]);
 								if (audioRef.current) {
+/* Html audio element value is 0 - 1. thats why it's devided by 100. and shadcn gives an array like volume[75].
+If we need to access the value we need to use the value[0]. to get the only element. */
 									audioRef.current.volume = value[0] / 100;
 								}
 							}} />
