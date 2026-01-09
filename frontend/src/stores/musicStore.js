@@ -13,6 +13,7 @@ export const musicStore = create(set => {
         favLanguageSongs: [],
         likedSongs: [],
         recentlyPlayedSongs: [],
+        isLiked: false,
 
         fetchSongs: async () => {
             set({ isLoading: true, error: null });
@@ -125,6 +126,19 @@ export const musicStore = create(set => {
             }
 
         },
+
+        toggleLiked: async (songId) => {
+            set({ isLoading: true, error: false });
+
+            try {
+                const response = await axiosInstance.post(`/user/like/${songId}`);
+                const { likesCounts, liked } = response.data;
+                
+                set
+            } catch (error) {
+                
+            }
+        }
 
     }
 });
