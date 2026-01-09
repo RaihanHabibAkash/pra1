@@ -6,7 +6,6 @@ export const playerStore = create((set, get) => {
         isPlaying: false,
         queue: [],
         currentIndex: -1,
-        // isShuffling: false,
 
         shuffleQueue: () => {
             const { currentSong, queue } = get();
@@ -29,11 +28,12 @@ export const playerStore = create((set, get) => {
             
             // Remains the index same.
             currentIndex = newQueue.findIndex(s => s._id === currentSong._id);
-
+            
             set({
                 queue: newQueue,
                 currentIndex
             });
+            console.log("Shuffle clicked", get().queue);
         },
 
         initializeQueue: (songs) => {
